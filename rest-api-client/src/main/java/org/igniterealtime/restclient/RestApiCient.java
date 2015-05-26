@@ -1,45 +1,51 @@
 package org.igniterealtime.restclient;
 
+import java.util.HashMap;
+
+import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.entity.UserEntities;
 
+/**
+ * The Class RestApiCient.
+ */
 public class RestApiCient {
-	private String url;
-	private int port;
-	private AuthenticationToken authenticationToken;
 
+	/** The rest client. */
+	private RestClient restClient;
+
+	/**
+	 * Instantiates a new rest api cient.
+	 *
+	 * @param url
+	 *            the url
+	 * @param port
+	 *            the port
+	 * @param authenticationToken
+	 *            the authentication token
+	 */
 	public RestApiCient(String url, int port, AuthenticationToken authenticationToken) {
-		this.url = url;
-		this.port = port;
-		this.authenticationToken = authenticationToken;
+		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
+				.connectionTimeout(5000).build();
 	}
 
+	/**
+	 * Gets the users.
+	 *
+	 * @return the users
+	 */
 	public UserEntities getUsers() {
-
-		return null;
+		UserEntities userEntities = restClient.get("users", UserEntities.class, new HashMap<String, String>());
+		return userEntities;
 	}
 
-	public String getUrl() {
-		return url;
+	/**
+	 * Gets the rest client.
+	 *
+	 * @return the rest client
+	 */
+	public RestClient getRestClient() {
+		return restClient;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public AuthenticationToken getAuthenticationToken() {
-		return authenticationToken;
-	}
-
-	public void setAuthenticationToken(AuthenticationToken authenticationToken) {
-		this.authenticationToken = authenticationToken;
-	}
 }
