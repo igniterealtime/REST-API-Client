@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.entity.UserEntities;
+import org.igniterealtime.restclient.entity.UserEntity;
 
 /**
  * The Class RestApiCient.
@@ -38,7 +39,18 @@ public class RestApiCient {
 		UserEntities userEntities = restClient.get("users", UserEntities.class, new HashMap<String, String>());
 		return userEntities;
 	}
-
+	
+	/**
+	 * Gets the user.
+	 *
+	 * @param username the username
+	 * @return the user
+	 */
+	public UserEntity getUser(String username) {
+		UserEntity userEntity = restClient.get("users/" + username, UserEntity.class, new HashMap<String, String>());
+		return userEntity;
+	}
+	
 	/**
 	 * Gets the rest client.
 	 *
