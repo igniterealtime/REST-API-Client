@@ -39,17 +39,16 @@ public class UserEntity {
 	/**
 	 * Instantiates a new user entity.
 	 *
-	 * @param username
-	 *            the username
-	 * @param name
-	 *            the name
-	 * @param email
-	 *            the email
+	 * @param username            the username
+	 * @param name            the name
+	 * @param email            the email
+	 * @param password the password
 	 */
-	public UserEntity(String username, String name, String email) {
+	public UserEntity(String username, String name, String email, String password) {
 		this.username = username;
 		this.name = name;
 		this.email = email;
+		this.password = password;
 	}
 
 	/**
