@@ -1,5 +1,5 @@
 # REST API Client
-REST API Client is an Java based Client for the [Openfire][1] [REST API][2] Plugin which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
+REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][2] which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
 
 ## Feature list
 * Get overview over all or specific user and to create, update or delete a user
@@ -13,8 +13,8 @@ REST API Client is an Java based Client for the [Openfire][1] [REST API][2] Plug
 ## Dependencies
 The REST API plugin need to be installed and configured on the Openfire server. 
 
-* How to install REST API: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#installation
-* How to configure REST API: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#authentication
+* [How to install REST API][3]
+* [How to configure REST API][4]
 
 ## Examples
 
@@ -31,5 +31,22 @@ REST API Plugin provides two types of authentication.
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
 ```
 
+### Get all or filtered users
+```java
+  // Set Shared secret key
+  AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
+  // Set Openfire settings (9090 is the port of Openfire Admin Console)
+  RestApiCient restApiCient = new RestApiCient("http://testdomain.com", 9090, authenticationToken);
+  
+  // Request all available users
+  restApiCient.getUsers();
+  
+  // Search for the user with the username "test". This act like the wildcard search %String%
+  restApiCient.getFilteredUsers("test");
+```
+
+
 [1]: https://igniterealtime.org/projects/openfire/index.jsp
 [2]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html
+[3]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#installation
+[4]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#authentication
