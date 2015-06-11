@@ -1,4 +1,4 @@
-# REST API Client [![Build Status](https://travis-ci.org/Redor/REST-API-Client.svg?branch=master)](https://travis-ci.org/Redor/REST-API-Client) 
+# REST API Client [![Build Status](https://travis-ci.org/Redor/REST-API-Client.svg?branch=master)](https://travis-ci.org/Redor/REST-API-Client)
 REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][2] which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
 
 ## Feature list
@@ -11,7 +11,7 @@ REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][
 * Get overview over all or specific chat room and to create, update or delete a chat room
 
 ## Dependencies
-The REST API plugin need to be installed and configured on the Openfire server. 
+The REST API plugin need to be installed and configured on the Openfire server.
 
 * [How to install REST API][3]
 * [How to configure REST API][4]
@@ -19,14 +19,14 @@ The REST API plugin need to be installed and configured on the Openfire server.
 ## Examples
 
 ### Authentication
-REST API Plugin provides two types of authentication. 
+REST API Plugin provides two types of authentication.
 * Basic HTTP Authentication
 * Shared secret key
 
 ```java
   // Basic HTTP Authentication
   AuthenticationToken authenticationToken = new AuthenticationToken("admin", "testPassword");
-		
+
   // Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
 ```
@@ -37,10 +37,10 @@ REST API Plugin provides two types of authentication.
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
   RestApiCient restApiCient = new RestApiCient("http://testdomain.com", 9090, authenticationToken);
-  
+
   // Request all available users
   restApiCient.getUsers();
-  
+
   // Search for the user with the username "test". This act like the wildcard search %String%
   restApiCient.getFilteredUsers("test");
 ```
@@ -51,5 +51,5 @@ REST API Plugin provides two types of authentication.
 [3]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#installation
 [4]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#authentication
 
-# Contact 
-r.soldatow@gmail.com
+# License
+REST API Client is licensed under Apache 2.0 style license, see LICENCE for further information.
