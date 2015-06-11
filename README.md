@@ -50,3 +50,6 @@ REST API Plugin provides two types of authentication.
 [2]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html
 [3]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#installation
 [4]: https://www.igniterealtime.org/projects/openfire/plugins/restapi/readme.html#authentication
+
+# Contact 
+r.soldatow@gmail.com
