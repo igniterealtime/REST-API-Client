@@ -5,12 +5,12 @@ REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][
 * [X] Get overview over all or specific user and to create, update or delete a user
 * [X] Get overview over all or specific chat room and to create, update or delete a chat room
 * [X] Get overview over all or specific user sessions
-* [] Get all participants of a specified room
-* [] Get overview over all or specific group and to create, update or delete a group
-* [] Get overview over all user roster entries and to add, update or delete a roster entry
-* [] Add user to a group and remove a user from a group
-* [] Lockout or unlock the user (enable / disable)
-* [] Get overview over all or specific system properties and to create, update or delete system property
+* [ ] Get all participants of a specified room
+* [ ] Get overview over all or specific group and to create, update or delete a group
+* [ ] Get overview over all user roster entries and to add, update or delete a roster entry
+* [ ] Add user to a group and remove a user from a group
+* [ ] Lockout or unlock the user (enable / disable)
+* [ ] Get overview over all or specific system properties and to create, update or delete system property
 
 
 ## Dependencies
