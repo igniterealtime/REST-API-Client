@@ -106,7 +106,7 @@ REST API Plugin provides two types of authentication.
   restApiClient.getSessions(String username);
 ```
 
-# Copyright and license
+## Copyright and license
 Created and copyright (c) 2015 by Roman Soldatow.
 REST API Client may be freely distributed under the Apache 2.0 license.
 
