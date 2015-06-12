@@ -52,7 +52,7 @@ public class MUCRoomEntity {
 	public MUCRoomEntity() {
 	}
 
-	public MUCRoomEntity(String naturalName, String roomName, String description) {
+	public MUCRoomEntity(String roomName, String naturalName, String description) {
 		this.naturalName = naturalName;
 		this.roomName = roomName;
 		this.description = description;

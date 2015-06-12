@@ -69,10 +69,14 @@ public final class RestClient {
 	/**
 	 * Gets the.
 	 *
-	 * @param <T> the generic type
-	 * @param restPath the rest path
-	 * @param clazz the clazz
-	 * @param queryParams the query params
+	 * @param <T>
+	 *            the generic type
+	 * @param restPath
+	 *            the rest path
+	 * @param clazz
+	 *            the clazz
+	 * @param queryParams
+	 *            the query params
 	 * @return the t
 	 */
 	public <T> T get(String restPath, Class<T> clazz, Map<String, String> queryParams) {
@@ -97,48 +101,75 @@ public final class RestClient {
 	/**
 	 * Post.
 	 *
-	 * @param <T> the generic type
-	 * @param restPath the rest path
-	 * @param clazz the clazz
-	 * @param payload the payload
-	 * @param queryParams the query params
-	 * @return the t
+	 * @param restPath
+	 *            the rest path
+	 * @param payload
+	 *            the payload
+	 * @param queryParams
+	 *            the query params
+	 * @return true, if successful
 	 */
-	public <T> T post(String restPath, Class<T> clazz, Object payload, Map<String, String> queryParams) {
-		return postOrPut(METHOD_POST, restPath, clazz, payload, queryParams);
+	public boolean post(String restPath, Object payload, Map<String, String> queryParams) {
+		LOG.debug("POST: {}", restPath);
+		return postOrPut(METHOD_POST, restPath, payload, queryParams);
 	}
 
 	/**
 	 * Put.
 	 *
-	 * @param <T> the generic type
-	 * @param restPath the rest path
-	 * @param clazz the clazz
-	 * @param payload the payload
-	 * @param queryParams the query params
-	 * @return the t
+	 * @param restPath
+	 *            the rest path
+	 * @param payload
+	 *            the payload
+	 * @param queryParams
+	 *            the query params
+	 * @return true, if successful
 	 */
-	public <T> T put(String restPath, Class<T> clazz, Object payload, Map<String, String> queryParams) {
+	public boolean put(String restPath, Object payload, Map<String, String> queryParams) {
+		LOG.debug("PUT: {}", restPath);
+		return postOrPut(METHOD_PUT, restPath, payload, queryParams);
+	}
 
-		return postOrPut(METHOD_PUT, restPath, clazz, payload, queryParams);
+	/**
+	 * Delete.
+	 *
+	 * @param restPath
+	 *            the rest path
+	 * @param queryParams
+	 *            the query params
+	 * @return true, if successful
+	 */
+	public boolean delete(String restPath, Map<String, String> queryParams) {
+		LOG.debug("DELETE: {}", restPath);
+		Builder builder = getRequestBuilder(restPath, queryParams);
+		ClientResponse cr = null;
+		try {
+			cr = builder.delete(ClientResponse.class);
+		} catch (ClientHandlerException e) {
+			LOG.error("ClientHandlerException", e);
+		}
+
+		if (cr != null && isStatusCodeOK(cr, restPath)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Post or put.
 	 *
-	 * @param <T> the generic type
-	 * @param method the method
-	 * @param restPath the rest path
-	 * @param clazz the clazz
-	 * @param payload the payload
-	 * @param queryParams the query params
-	 * @return the t
+	 * @param method
+	 *            the method
+	 * @param restPath
+	 *            the rest path
+	 * @param payload
+	 *            the payload
+	 * @param queryParams
+	 *            the query params
+	 * @return true, if successful
 	 */
-	@SuppressWarnings("unchecked")
-	private <T> T postOrPut(String method, String restPath, Class<T> clazz, Object payload,
+	private boolean postOrPut(String method, String restPath, Object payload,
 			Map<String, String> queryParams) {
-		LOG.debug("GET: {}", restPath);
-
 		Builder builder = getRequestBuilder(restPath, queryParams);
 		ClientResponse cr = null;
 		try {
@@ -151,54 +182,48 @@ public final class RestClient {
 			LOG.error("ClientHandlerException", e);
 		}
 
-		// if the client response is expected back, stop here and return the
-		// client response directly
-		if (clazz.getName().equals(ClientResponse.class.getName())) {
-			return (T) cr;
-		}
-
 		if (cr != null && isStatusCodeOK(cr, restPath)) {
-			try {
-				T updated = (T) cr.getEntity(clazz);
-				if (updated != null) {
-					return updated;
-				}
-			} catch (ClientHandlerException e) {
-				LOG.error("Error in getting updated entity", e);
-			}
+			return true;
 		}
-		return null;
+		return false;
 	}
 
 	/**
 	 * Checks if is status code ok.
 	 *
-	 * @param cr the cr
-	 * @param uri the uri
+	 * @param cr
+	 *            the cr
+	 * @param uri
+	 *            the uri
 	 * @return true, if checks if is status code ok
 	 */
 	private boolean isStatusCodeOK(ClientResponse cr, String uri) {
 		if (cr.getStatus() == Status.OK.getStatusCode() || cr.getStatus() == Status.CREATED.getStatusCode()) {
 			return true;
-		} else if(cr.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
+		} else if (cr.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
 			LOG.error("UNAUTHORIZED: Your credentials are wrong. Please check your username/password or the secret key");
-		} else if(cr.getStatus() == Status.CONFLICT.getStatusCode() || cr.getStatus() == Status.NOT_FOUND.getStatusCode() 
-				|| cr.getStatus() == Status.FORBIDDEN.getStatusCode() || cr.getStatus() == Status.BAD_REQUEST.getStatusCode() ) {
+		} else if (cr.getStatus() == Status.CONFLICT.getStatusCode()
+				|| cr.getStatus() == Status.NOT_FOUND.getStatusCode()
+				|| cr.getStatus() == Status.FORBIDDEN.getStatusCode()
+				|| cr.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
 			ErrorResponse errorResponse = (ErrorResponse) cr.getEntity(ErrorResponse.class);
-			LOG.error("{} - {} on ressource {}", errorResponse.getException(), errorResponse.getMessage(), errorResponse.getRessource());
+			LOG.error("{} - {} on ressource {}", errorResponse.getException(), errorResponse.getMessage(),
+					errorResponse.getRessource());
 		} else {
 			LOG.error("Unsupported status code: " + cr);
 		}
 		LOG.error(cr.toString());
-		
+
 		return false;
 	}
 
 	/**
 	 * Gets the request builder.
 	 *
-	 * @param restPath the rest path
-	 * @param queryParams the query params
+	 * @param restPath
+	 *            the rest path
+	 * @param queryParams
+	 *            the query params
 	 * @return the request builder
 	 */
 	private Builder getRequestBuilder(String restPath, Map<String, String> queryParams) {
@@ -213,7 +238,7 @@ public final class RestClient {
 				}
 			}
 		}
-		
+
 		try {
 			URI u = new URI(this.baseURI + "/plugins/restapi/v1/" + restPath);
 			Client client = createrRestClient();
@@ -225,7 +250,7 @@ public final class RestClient {
 				LOG.debug("HEADER: {} = {}", entry.getKey(), entry.getValue());
 				requestBuilder = res.getRequestBuilder().header(entry.getKey(), entry.getValue());
 			}
-			
+
 			requestBuilder.accept(MediaType.APPLICATION_XML);
 			return requestBuilder;
 		} catch (Exception e) {
@@ -500,7 +525,8 @@ public final class RestClient {
 	/**
 	 * Sets the token.
 	 *
-	 * @param token the token
+	 * @param token
+	 *            the token
 	 */
 	public void setToken(AuthenticationToken token) {
 		this.token = token;

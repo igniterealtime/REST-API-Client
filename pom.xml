@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.igniterealtime</groupId>
 	<artifactId>rest-api-client</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>REST API Client for Openfire</name>
 	<url>https://github.com/Redor/REST-API-Client</url>
 
