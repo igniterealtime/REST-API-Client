@@ -39,29 +39,29 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiCient restApiCient = new RestApiCient("http://testdomain.com", 9090, authenticationToken);
+  restApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all available users
-  restApiCient.getUsers();
+  restApiClient.getUsers();
   
   // Get specific user by username
-  restApiCient.getUser("testUsername");
+  restApiClient.getUser("testUsername");
 
   // Search for the user with the username "test". This act like the wildcard search %String%
   HashMap<String, String> querys = new HashMap<String, String>();
   querys.put("search", "test");
-  restApiCient.getUser(querys);
+  restApiClient.getUser(querys);
   
   // Create a new user (username, name, email, passowrd). There are more user settings available.
   UserEntity userEntity = new UserEntity("testUsername", "testName", "test@email.com", "p4ssw0rd");
-  restApiCient.createUser(userEntity);
+  restApiClient.createUser(userEntity);
   
   // Update a user
   userEntity.setName("newName");
-  restApiCient.updateUser(userEntity);
+  restApiClient.updateUser(userEntity);
   
   // Delete a user
-  restApiCient.deleteUser("testUsername");
+  restApiClient.deleteUser("testUsername");
 ```
 
 ### Chat rooms related examples
@@ -69,26 +69,26 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiCient restApiCient = new RestApiCient("http://testdomain.com", 9090, authenticationToken);
+  restApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all public chatrooms
-  restApiCient.getChatRooms();
+  restApiClient.getChatRooms();
   
   // Search for the chat room with the room name "test". This act like the wildcard search %String%
   HashMap<String, String> querys = new HashMap<String, String>();
   querys.put("search", "test");
-  restApiCient.getChatRooms(querys);
+  restApiClient.getChatRooms(querys);
   
   // Create a new chat room (chatroom id, chatroom name, description). There are more chatroom settings available. 
   MUCRoomEntity chatRoom = new MUCRoomEntity("chatroom1", "First Chat Room", "Some description");
-  restApiCient.createChatRoom(chatRoom);
+  restApiClient.createChatRoom(chatRoom);
   
   // Update a chat room
   chatRoom.setDescription("Updated description");
-  restApiCient.updateChatRoom(chatRoom);
+  restApiClient.updateChatRoom(chatRoom);
   
   // Delete a chat room
-  restApiCient.deleteChatRoom("chatroom1");
+  restApiClient.deleteChatRoom("chatroom1");
 ```
 
 ### Session related examples
@@ -96,13 +96,13 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiCient restApiCient = new RestApiCient("http://testdomain.com", 9090, authenticationToken);
+  restApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all active Sessions
-  restApiCient.getSessions();
+  restApiClient.getSessions();
   
   // Request all active Sessions from a specific user
-  restApiCient.getSessions(String username);
+  restApiClient.getSessions(String username);
 ```
 
 # Copyright and license
