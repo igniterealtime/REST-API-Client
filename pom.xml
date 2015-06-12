@@ -1,12 +1,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>org.igniterealtime</groupId>
 	<artifactId>rest-api-client</artifactId>
-	<version>0.0.2</version>
+	<version>0.1.0</version>
 	<name>REST API Client for Openfire</name>
 	<url>https://github.com/Redor/REST-API-Client</url>
+	<description>Java REST API Client for the Openfire to manage Openfire instances by sending an REST/HTTP request to the server</description>
 
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	
+	<scm>
+		<connection>scm:git:git://github.com/Redor/REST-API-Client</connection>
+		<developerConnection>scm:git:git://github.com/Redor/REST-API-Client</developerConnection>
+		<url>https://github.com/Redor/REST-API-Client</url>
+	</scm>
+	
+	<developers>
+		<developer>
+			<name>Roman Soldatow</name>
+			<email>r.soldatow@gmail</email>
+			<organizationUrl>https://github.com/Redor/REST-API-Client</organizationUrl>
+		</developer>
+	</developers>
 
 	<dependencies>
 		<dependency>
@@ -27,6 +55,10 @@
 	</dependencies>
 
 	<repositories>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
 		<repository>
 			<id>mvnrepository</id>
 			<url>http://repo1.maven.org/maven2</url>
