@@ -1,4 +1,6 @@
 # REST API Client [![Build Status](https://travis-ci.org/Redor/REST-API-Client.svg?branch=master)](https://travis-ci.org/Redor/REST-API-Client)
+
+[![Join the chat at https://gitter.im/Redor/REST-API-Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Redor/REST-API-Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][2] which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
 
 ## Feature list
