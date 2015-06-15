@@ -12,15 +12,15 @@ import org.igniterealtime.restclient.entity.UserEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
 
 /**
- * The Class RestApiCient.
+ * The Class RestApiClient.
  */
-public class RestApiCient {
+public class RestApiClient {
 
 	/** The rest client. */
 	private RestClient restClient;
 
 	/**
-	 * Instantiates a new rest api cient.
+	 * Instantiates a new rest api client.
 	 *
 	 * @param url
 	 *            the url
@@ -29,7 +29,7 @@ public class RestApiCient {
 	 * @param authenticationToken
 	 *            the authentication token
 	 */
-	public RestApiCient(String url, int port, AuthenticationToken authenticationToken) {
+	public RestApiClient(String url, int port, AuthenticationToken authenticationToken) {
 		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
 				.connectionTimeout(5000).build();
 	}
