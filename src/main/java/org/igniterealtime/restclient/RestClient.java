@@ -95,7 +95,11 @@ public final class RestClient {
 			return (T) cr;
 		}
 
-		return (T) cr.getEntity(clazz);
+		if (cr != null && isStatusCodeOK(cr, restPath)) {
+			return (T) cr.getEntity(clazz);
+		}
+
+		return null;
 	}
 
 	/**
