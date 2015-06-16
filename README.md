@@ -10,7 +10,7 @@ REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][
 * [ ] Get overview over all or specific group and to create, update or delete a group
 * [ ] Get overview over all user roster entries and to add, update or delete a roster entry
 * [ ] Add user to a group and remove a user from a group
-* [ ] Lockout or unlock the user (enable / disable)
+* [X] Lockout or unlock the user (enable / disable)
 * [ ] Get overview over all or specific system properties and to create, update or delete system property
 
 
@@ -63,6 +63,22 @@ REST API Plugin provides two types of authentication.
   
   // Delete a user
   restApiClient.deleteUser("testUsername");
+  
+  // Get all user groups from a user
+  restApiCient.getUserGroups("testUsername");
+  
+  // Add new groups to a user
+  List<String> groupNames = new ArrayList<String>();
+  groupNames.add("Moderators");
+  groupNames.add("Supporters");
+  UserGroupsEntity userGroupsEntity = new UserGroupsEntity(groupNames);
+  restApiClient.addUserToGroups("testUsername", userGroupsEntity);
+  
+  // Lockout/Ban a user
+  restApiClient.lockoutUser("testUsername");
+  
+  // Unlock/Unban a user
+  restApiClient.unlockUser("testUsername");
 ```
 
 ### Chat rooms related examples

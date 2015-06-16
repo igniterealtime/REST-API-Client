@@ -10,6 +10,7 @@ import org.igniterealtime.restclient.entity.MUCRoomEntity;
 import org.igniterealtime.restclient.entity.SessionEntities;
 import org.igniterealtime.restclient.entity.UserEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
+import org.igniterealtime.restclient.entity.UserGroupsEntity;
 
 /**
  * The Class RestApiClient.
@@ -243,7 +244,51 @@ public class RestApiClient {
 				new HashMap<String, String>());
 		return sessionEntities;
 	}
-
+	
+	/**
+	 * Gets the user groups.
+	 *
+	 * @param username the username
+	 * @return the user groups
+	 */
+	public UserGroupsEntity getUserGroups(String username) {
+		return restClient.get("users/" + username + "/groups", UserGroupsEntity.class,
+				new HashMap<String, String>());
+	}
+	
+	/**
+	 * Adds the user to groups.
+	 *
+	 * @param username the username
+	 * @param userGroupsEntity the user groups entity
+	 * @return true, if adds the user to groups
+	 */
+	public boolean addUserToGroups(String username, UserGroupsEntity userGroupsEntity) {
+		return restClient.post("users/" + username + "/groups", userGroupsEntity,
+				new HashMap<String, String>());
+	}
+	
+	
+	/**
+	 * Lockout/Ban a user from openfire.
+	 *
+	 * @param username the username
+	 * @return true, if lockout user
+	 */
+	public boolean lockoutUser(String username) {
+		return restClient.post("lockouts/" + username, null, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Unlock user.
+	 *
+	 * @param username the username
+	 * @return true, if unlock user
+	 */
+	public boolean unlockUser(String username) {
+		return restClient.delete("lockouts/" + username, new HashMap<String, String>());
+	}
+	
 	/**
 	 * Gets the rest client.
 	 *
