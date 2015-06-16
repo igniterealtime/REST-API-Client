@@ -90,6 +90,18 @@ REST API Plugin provides two types of authentication.
   
   // Delete a chat room
   restApiClient.deleteChatRoom("chatroom1");
+  
+  // Add user with role "owner" to a chat room
+  restApiClient.addOwner("chatroom1", "username");
+  
+  // Add user with role "admin" to a chat room
+  restApiClient.addAdmin("chatroom1", "username");
+  
+  // Add user with role "member" to a chat room
+  restApiClient.addMember("chatroom1", "username");
+  
+  // Add user with role "outcast" to a chat room
+  restApiClient.addOutcast("chatroom1", "username");
 ```
 
 ### Session related examples

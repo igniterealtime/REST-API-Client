@@ -30,6 +30,9 @@ public class RestApiClient {
 	 *            the authentication token
 	 */
 	public RestApiClient(String url, int port, AuthenticationToken authenticationToken) {
+		if (!url.startsWith("http")) {
+			url = "http://" + url;
+		}
 		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
 				.connectionTimeout(5000).build();
 	}
@@ -163,6 +166,58 @@ public class RestApiClient {
 	 */
 	public boolean deleteChatRoom(String roomName) {
 		return restClient.delete("chatrooms/" + roomName, new HashMap<String, String>());
+	}
+
+	/**
+	 * Adds the owner.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return true, if successful
+	 */
+	public boolean addOwner(String roomName, String jid) {
+		return restClient.post("chatrooms/" + roomName + "/owners/" + jid, null, new HashMap<String, String>());
+	}
+
+	/**
+	 * Adds the admin.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return true, if successful
+	 */
+	public boolean addAdmin(String roomName, String jid) {
+		return restClient.post("chatrooms/" + roomName + "/admins/" + jid, null, new HashMap<String, String>());
+	}
+
+	/**
+	 * Adds the member.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return true, if successful
+	 */
+	public boolean addMember(String roomName, String jid) {
+		return restClient.post("chatrooms/" + roomName + "/members/" + jid, null, new HashMap<String, String>());
+	}
+
+	/**
+	 * Adds the outcast.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return true, if successful
+	 */
+	public boolean addOutcast(String roomName, String jid) {
+		return restClient.post("chatrooms/" + roomName + "/outcasts/" + jid, null, new HashMap<String, String>());
 	}
 
 	/**
