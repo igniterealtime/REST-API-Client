@@ -3,13 +3,15 @@
 REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][2] which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
 
 ## Feature list
+REST API Client cover all available REST API plugin features.
+
 * [X] Get overview over all or specific user and to create, update or delete a user
 * [X] Get overview over all or specific chat room and to create, update or delete a chat room
 * [X] Get overview over all or specific user sessions
 * [X] Get all participants of a specified room
-* [ ] Get overview over all or specific group and to create, update or delete a group
-* [ ] Get overview over all user roster entries and to add, update or delete a roster entry
-* [ ] Add user to a group and remove a user from a group
+* [X] Get overview over all or specific group and to create, update or delete a group
+* [X] Get overview over all user roster entries and to add, update or delete a roster entry
+* [X] Add user to a group
 * [X] Lockout or unlock the user (enable / disable)
 * [X] Get overview over all or specific system properties and to create, update or delete system property
 
@@ -160,6 +162,57 @@ REST API Plugin provides two types of authentication.
   
   // Delete a system property
   restApiClient.deleteSystemProperty("propertyName");
+```
+
+### Group related examples
+```java
+  // Set Shared secret key
+  AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
+  // Set Openfire settings (9090 is the port of Openfire Admin Console)
+  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+
+  // Retrieve all groups
+  restApiClient.getGroups();
+  
+  // Retrieve specific group
+  restApiClient.getGroup("Moderators");
+  
+  // Create a group
+  GroupEntity groupEntity = new GroupEntity("Moderators", "Moderator Group");
+  restApiClient.createGroup(groupEntity);
+  
+  // Update a group
+  GroupEntity groupEntity = new GroupEntity("Moderators", "Changed Moderator Group description");
+  restApiClient.updateGroup(groupEntity);
+  
+  // Delete a group
+  restApiClient.deleteGroup("Moderators");
+```
+
+### Group related examples
+```java
+  // Set Shared secret key
+  AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
+  // Set Openfire settings (9090 is the port of Openfire Admin Console)
+  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+
+  // Retrieve user roster
+  restApiClient.getRoster("testUsername");
+  
+  // Create a user roster entry (Possible values for subscriptionType are: -1 (remove), 0 (none), 1 (to), 2 (from), 3 (both))
+  RosterItemEntity rosterItemEntity = new RosterItemEntity("testUser2@testdomain.com", "TestUser2", 3);
+  // Groups are optional
+  List<String> groups = new ArrayList<String>();
+  groups.add("Supporter");
+  rosterItemEntity.setGroups(groups);
+  restApiClient.addRosterEntry("testUsername", rosterItemEntity);
+  
+  // Update a user roster entry
+  RosterItemEntity rosterItemEntity = new RosterItemEntity("testUser2@testdomain.com", "SomeUser", 3);
+  restApiClient.updateRosterEntry("testUsername", rosterItemEntity);
+  
+  // Delete a user roster entry
+  restApiClient.deleteRosterEntry("testUsername", "testUser2@testdomain.com");
 ```
 
 ## Copyright and license

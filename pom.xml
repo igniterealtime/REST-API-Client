@@ -4,7 +4,7 @@
 	
 	<groupId>org.igniterealtime</groupId>
 	<artifactId>rest-api-client</artifactId>
-	<version>0.1.1</version>
+	<version>1.0.0</version>
 	<name>REST API Client for Openfire</name>
 	<url>https://github.com/Redor/REST-API-Client</url>
 	<description>Java REST API Client for the Openfire to manage Openfire instances by sending an REST/HTTP request to the server</description>

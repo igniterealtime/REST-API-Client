@@ -5,9 +5,13 @@ import java.util.Map;
 
 import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
+import org.igniterealtime.restclient.entity.GroupEntities;
+import org.igniterealtime.restclient.entity.GroupEntity;
 import org.igniterealtime.restclient.entity.MUCRoomEntities;
 import org.igniterealtime.restclient.entity.MUCRoomEntity;
 import org.igniterealtime.restclient.entity.ParticipantEntities;
+import org.igniterealtime.restclient.entity.RosterEntities;
+import org.igniterealtime.restclient.entity.RosterItemEntity;
 import org.igniterealtime.restclient.entity.SessionEntities;
 import org.igniterealtime.restclient.entity.SystemProperties;
 import org.igniterealtime.restclient.entity.SystemProperty;
@@ -352,6 +356,98 @@ public class RestApiClient {
 	 */
 	public boolean deleteSystemProperty(String propertyName) {
 		return restClient.delete("system/properties/" + propertyName, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Gets the groups.
+	 *
+	 * @return the groups
+	 */
+	public GroupEntities getGroups() {
+		return restClient.get("groups", GroupEntities.class, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Gets the group.
+	 *
+	 * @param groupName the group name
+	 * @return the group
+	 */
+	public GroupEntity getGroup(String groupName) {
+		return restClient.get("groups/" + groupName, GroupEntity.class, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Creates the group.
+	 *
+	 * @param group the group
+	 * @return true, if creates the group
+	 */
+	public boolean createGroup(GroupEntity group) {
+		return restClient.post("groups", group, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Update group.
+	 *
+	 * @param group the group
+	 * @return true, if update group
+	 */
+	public boolean updateGroup(GroupEntity group) {
+		return restClient.put("groups/" + group.getName(), group, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Delete group.
+	 *
+	 * @param groupName the group name
+	 * @return true, if delete group
+	 */
+	public boolean deleteGroup(String groupName) {
+		return restClient.delete("groups/" + groupName, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Gets the roster.
+	 *
+	 * @param username the username
+	 * @return the roster
+	 */
+	public RosterEntities getRoster(String username) {
+		return restClient.get("users/" + username + "/roster", RosterEntities.class, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Adds the roster entry.
+	 *
+	 * @param username the username
+	 * @param rosterItemEntity the roster item entity
+	 * @return true, if adds the roster entry
+	 */
+	public boolean addRosterEntry(String username, RosterItemEntity rosterItemEntity) {
+		return restClient.post("users/" + username + "/roster", rosterItemEntity, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Update roster entry.
+	 *
+	 * @param username the username
+	 * @param rosterItemEntity the roster item entity
+	 * @return true, if update roster entry
+	 */
+	public boolean updateRosterEntry(String username, RosterItemEntity rosterItemEntity) {
+		return restClient.put("users/" + username + "/roster/" + rosterItemEntity.getJid(), rosterItemEntity, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Delete roster entry.
+	 *
+	 * @param username the username
+	 * @param jid the jid
+	 * @return true, if delete roster entry
+	 */
+	public boolean deleteRosterEntry(String username, String jid) {
+		return restClient.delete("users/" + username + "/roster/" + jid, new HashMap<String, String>());
 	}
 	
 	/**
