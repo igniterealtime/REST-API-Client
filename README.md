@@ -189,7 +189,7 @@ REST API Plugin provides two types of authentication.
   restApiClient.deleteGroup("Moderators");
 ```
 
-### Group related examples
+### Roster related examples
 ```java
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
