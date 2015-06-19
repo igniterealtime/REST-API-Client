@@ -7,7 +7,10 @@ import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.entity.MUCRoomEntities;
 import org.igniterealtime.restclient.entity.MUCRoomEntity;
+import org.igniterealtime.restclient.entity.ParticipantEntities;
 import org.igniterealtime.restclient.entity.SessionEntities;
+import org.igniterealtime.restclient.entity.SystemProperties;
+import org.igniterealtime.restclient.entity.SystemProperty;
 import org.igniterealtime.restclient.entity.UserEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
 import org.igniterealtime.restclient.entity.UserGroupsEntity;
@@ -168,6 +171,16 @@ public class RestApiClient {
 	public boolean deleteChatRoom(String roomName) {
 		return restClient.delete("chatrooms/" + roomName, new HashMap<String, String>());
 	}
+	
+	/**
+	 * Gets the chat room participants.
+	 *
+	 * @param roomName the room name
+	 * @return the chat room participants
+	 */
+	public ParticipantEntities getChatRoomParticipants(String roomName) {
+		return restClient.get("chatrooms/" + roomName + "/participants", ParticipantEntities.class, new HashMap<String, String>());
+	}
 
 	/**
 	 * Adds the owner.
@@ -287,6 +300,58 @@ public class RestApiClient {
 	 */
 	public boolean unlockUser(String username) {
 		return restClient.delete("lockouts/" + username, new HashMap<String, String>());
+	}
+	
+	
+	/**
+	 * Gets the system properties.
+	 *
+	 * @return the system properties
+	 */
+	public SystemProperties getSystemProperties() {
+		return restClient.get("system/properties", SystemProperties.class,
+				new HashMap<String, String>());
+	}
+	
+	/**
+	 * Gets the system property.
+	 *
+	 * @param propertyName the property name
+	 * @return the system property
+	 */
+	public SystemProperty getSystemProperty(String propertyName) {
+		return restClient.get("system/properties/" + propertyName, SystemProperty.class,
+				new HashMap<String, String>());
+	}
+	
+	/**
+	 * Creates the system property.
+	 *
+	 * @param property the property
+	 * @return true, if creates the system property
+	 */
+	public boolean createSystemProperty(SystemProperty property) {
+		return restClient.post("system/properties", property, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Update system property.
+	 *
+	 * @param property the property
+	 * @return true, if update system property
+	 */
+	public boolean updateSystemProperty(SystemProperty property) {
+		return restClient.put("system/properties/" + property.getKey(), property, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Delete system property.
+	 *
+	 * @param propertyName the property name
+	 * @return true, if delete system property
+	 */
+	public boolean deleteSystemProperty(String propertyName) {
+		return restClient.delete("system/properties/" + propertyName, new HashMap<String, String>());
 	}
 	
 	/**

@@ -6,12 +6,12 @@ REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][
 * [X] Get overview over all or specific user and to create, update or delete a user
 * [X] Get overview over all or specific chat room and to create, update or delete a chat room
 * [X] Get overview over all or specific user sessions
-* [ ] Get all participants of a specified room
+* [X] Get all participants of a specified room
 * [ ] Get overview over all or specific group and to create, update or delete a group
 * [ ] Get overview over all user roster entries and to add, update or delete a roster entry
 * [ ] Add user to a group and remove a user from a group
 * [X] Lockout or unlock the user (enable / disable)
-* [ ] Get overview over all or specific system properties and to create, update or delete system property
+* [X] Get overview over all or specific system properties and to create, update or delete system property
 
 
 ## Dependencies
@@ -118,6 +118,9 @@ REST API Plugin provides two types of authentication.
   
   // Add user with role "outcast" to a chat room
   restApiClient.addOutcast("chatroom1", "username");
+  
+  // Get all particapants from a specified chat room
+  restApiClient.getChatRoomParticipants("chatroom1");
 ```
 
 ### Session related examples
@@ -132,6 +135,31 @@ REST API Plugin provides two types of authentication.
   
   // Request all active Sessions from a specific user
   restApiClient.getSessions(String username);
+```
+
+### System related examples
+```java
+  // Set Shared secret key
+  AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
+  // Set Openfire settings (9090 is the port of Openfire Admin Console)
+  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+
+  // Retrieve all system properties
+  restApiClient.getSystemProperties();
+  
+  // Retrieve specific system property e.g. "xmpp.domain"
+  restApiClient.getSystemProperty("xmpp.domain");
+  
+  // Create a system property
+  SystemProperty systemProperty = new SystemProperty("propertyName", "propertyValue");
+  restApiClient.createSystemProperty(systemProperty);
+  
+  // Update a system property
+  SystemProperty systemProperty = new SystemProperty("propertyName", "ChangedPropertyValue");
+  restApiClient.updateSystemProperty(systemProperty);
+  
+  // Delete a system property
+  restApiClient.deleteSystemProperty("propertyName");
 ```
 
 ## Copyright and license
