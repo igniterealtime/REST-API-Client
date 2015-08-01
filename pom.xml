@@ -15,7 +15,7 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-	
+	https://github.com/igniterealtime/REST-API-Client.git
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -23,16 +23,16 @@
 	</parent>
 	
 	<scm>
-		<connection>scm:git:git://github.com/Redor/REST-API-Client</connection>
-		<developerConnection>scm:git:git://github.com/Redor/REST-API-Client</developerConnection>
-		<url>https://github.com/Redor/REST-API-Client</url>
+		<connection>scm:git:git://github.com/igniterealtime/REST-API-Client</connection>
+		<developerConnection>scm:git:git://github.com/igniterealtime/REST-API-Client</developerConnection>
+		<url>https://github.com/igniterealtime/REST-API-Client</url>
 	</scm>
 	
 	<developers>
 		<developer>
 			<name>Roman Soldatow</name>
 			<email>r.soldatow@gmail</email>
-			<organizationUrl>https://github.com/Redor/REST-API-Client</organizationUrl>
+			<organizationUrl>https://github.com/igniterealtime/REST-API-Client</organizationUrl>
 		</developer>
 	</developers>
 
