@@ -18,7 +18,7 @@ REST API Client cover all available REST API plugin features.
 
 ## Repository
 The project is available through the central Maven Repository
-### Maven
+#### Maven
 ```xml
 <dependency>
     <groupId>org.igniterealtime</groupId>
@@ -26,7 +26,7 @@ The project is available through the central Maven Repository
     <version>1.0.0</version>
 </dependency>
 ```
-### Gradle / Grails
+#### Gradle / Grails
 ```xml
 compile 'org.igniterealtime:rest-api-client:1.0.0'
 ```
