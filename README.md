@@ -16,6 +16,21 @@ REST API Client cover all available REST API plugin features.
 * [X] Get overview over all or specific system properties and to create, update or delete system property
 
 
+## Repository
+The project is available through the central Maven Repository
+### Maven
+```xml
+<dependency>
+    <groupId>org.igniterealtime</groupId>
+    <artifactId>rest-api-client</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+### Gradle / Grails
+```xml
+compile 'org.igniterealtime:rest-api-client:1.0.0'
+```
+
 ## Dependencies
 The REST API plugin need to be installed and configured on the Openfire server.
 
@@ -46,7 +61,7 @@ REST API Plugin provides two types of authentication.
 
   // Request all available users
   restApiClient.getUsers();
-  
+
   // Get specific user by username
   restApiClient.getUser("testUsername");
 
@@ -54,31 +69,31 @@ REST API Plugin provides two types of authentication.
   HashMap<String, String> querys = new HashMap<String, String>();
   querys.put("search", "test");
   restApiClient.getUser(querys);
-  
+
   // Create a new user (username, name, email, passowrd). There are more user settings available.
   UserEntity userEntity = new UserEntity("testUsername", "testName", "test@email.com", "p4ssw0rd");
   restApiClient.createUser(userEntity);
-  
+
   // Update a user
   userEntity.setName("newName");
   restApiClient.updateUser(userEntity);
-  
+
   // Delete a user
   restApiClient.deleteUser("testUsername");
-  
+
   // Get all user groups from a user
   restApiCient.getUserGroups("testUsername");
-  
+
   // Add new groups to a user
   List<String> groupNames = new ArrayList<String>();
   groupNames.add("Moderators");
   groupNames.add("Supporters");
   UserGroupsEntity userGroupsEntity = new UserGroupsEntity(groupNames);
   restApiClient.addUserToGroups("testUsername", userGroupsEntity);
-  
+
   // Lockout/Ban a user
   restApiClient.lockoutUser("testUsername");
-  
+
   // Unlock/Unban a user
   restApiClient.unlockUser("testUsername");
 ```
@@ -92,35 +107,35 @@ REST API Plugin provides two types of authentication.
 
   // Request all public chatrooms
   restApiClient.getChatRooms();
-  
+
   // Search for the chat room with the room name "test". This act like the wildcard search %String%
   HashMap<String, String> querys = new HashMap<String, String>();
   querys.put("search", "test");
   restApiClient.getChatRooms(querys);
-  
-  // Create a new chat room (chatroom id, chatroom name, description). There are more chatroom settings available. 
+
+  // Create a new chat room (chatroom id, chatroom name, description). There are more chatroom settings available.
   MUCRoomEntity chatRoom = new MUCRoomEntity("chatroom1", "First Chat Room", "Some description");
   restApiClient.createChatRoom(chatRoom);
-  
+
   // Update a chat room
   chatRoom.setDescription("Updated description");
   restApiClient.updateChatRoom(chatRoom);
-  
+
   // Delete a chat room
   restApiClient.deleteChatRoom("chatroom1");
-  
+
   // Add user with role "owner" to a chat room
   restApiClient.addOwner("chatroom1", "username");
-  
+
   // Add user with role "admin" to a chat room
   restApiClient.addAdmin("chatroom1", "username");
-  
+
   // Add user with role "member" to a chat room
   restApiClient.addMember("chatroom1", "username");
-  
+
   // Add user with role "outcast" to a chat room
   restApiClient.addOutcast("chatroom1", "username");
-  
+
   // Get all particapants from a specified chat room
   restApiClient.getChatRoomParticipants("chatroom1");
 ```
@@ -134,7 +149,7 @@ REST API Plugin provides two types of authentication.
 
   // Request all active Sessions
   restApiClient.getSessions();
-  
+
   // Request all active Sessions from a specific user
   restApiClient.getSessions(String username);
 ```
@@ -148,18 +163,18 @@ REST API Plugin provides two types of authentication.
 
   // Retrieve all system properties
   restApiClient.getSystemProperties();
-  
+
   // Retrieve specific system property e.g. "xmpp.domain"
   restApiClient.getSystemProperty("xmpp.domain");
-  
+
   // Create a system property
   SystemProperty systemProperty = new SystemProperty("propertyName", "propertyValue");
   restApiClient.createSystemProperty(systemProperty);
-  
+
   // Update a system property
   SystemProperty systemProperty = new SystemProperty("propertyName", "ChangedPropertyValue");
   restApiClient.updateSystemProperty(systemProperty);
-  
+
   // Delete a system property
   restApiClient.deleteSystemProperty("propertyName");
 ```
@@ -173,18 +188,18 @@ REST API Plugin provides two types of authentication.
 
   // Retrieve all groups
   restApiClient.getGroups();
-  
+
   // Retrieve specific group
   restApiClient.getGroup("Moderators");
-  
+
   // Create a group
   GroupEntity groupEntity = new GroupEntity("Moderators", "Moderator Group");
   restApiClient.createGroup(groupEntity);
-  
+
   // Update a group
   GroupEntity groupEntity = new GroupEntity("Moderators", "Changed Moderator Group description");
   restApiClient.updateGroup(groupEntity);
-  
+
   // Delete a group
   restApiClient.deleteGroup("Moderators");
 ```
@@ -198,7 +213,7 @@ REST API Plugin provides two types of authentication.
 
   // Retrieve user roster
   restApiClient.getRoster("testUsername");
-  
+
   // Create a user roster entry (Possible values for subscriptionType are: -1 (remove), 0 (none), 1 (to), 2 (from), 3 (both))
   RosterItemEntity rosterItemEntity = new RosterItemEntity("testUser2@testdomain.com", "TestUser2", 3);
   // Groups are optional
@@ -206,11 +221,11 @@ REST API Plugin provides two types of authentication.
   groups.add("Supporter");
   rosterItemEntity.setGroups(groups);
   restApiClient.addRosterEntry("testUsername", rosterItemEntity);
-  
+
   // Update a user roster entry
   RosterItemEntity rosterItemEntity = new RosterItemEntity("testUser2@testdomain.com", "SomeUser", 3);
   restApiClient.updateRosterEntry("testUsername", rosterItemEntity);
-  
+
   // Delete a user roster entry
   restApiClient.deleteRosterEntry("testUsername", "testUser2@testdomain.com");
 ```
