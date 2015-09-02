@@ -57,7 +57,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all available users
   restApiClient.getUsers();
@@ -103,7 +103,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all public chatrooms
   restApiClient.getChatRooms();
@@ -145,7 +145,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Request all active Sessions
   restApiClient.getSessions();
@@ -159,7 +159,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Retrieve all system properties
   restApiClient.getSystemProperties();
@@ -184,7 +184,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Retrieve all groups
   restApiClient.getGroups();
@@ -209,7 +209,7 @@ REST API Plugin provides two types of authentication.
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
-  RestApiClient restApiClient = new restApiClient("http://testdomain.com", 9090, authenticationToken);
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
   // Retrieve user roster
   restApiClient.getRoster("testUsername");
