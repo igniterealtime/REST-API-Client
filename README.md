@@ -68,7 +68,7 @@ REST API Plugin provides two types of authentication.
   // Search for the user with the username "test". This act like the wildcard search %String%
   HashMap<String, String> querys = new HashMap<String, String>();
   querys.put("search", "test");
-  restApiClient.getUser(querys);
+  restApiClient.getUsers(querys);
 
   // Create a new user (username, name, email, passowrd). There are more user settings available.
   UserEntity userEntity = new UserEntity("testUsername", "testName", "test@email.com", "p4ssw0rd");
