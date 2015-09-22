@@ -231,7 +231,7 @@ REST API Plugin provides two types of authentication.
 ```
 
 ## Copyright and license
-Created and copyright (c) 2015 by Roman Soldatow.
+Created and copyright (c) 2015 by Roman Soldatow (roman@soldatow.de).
 REST API Client may be freely distributed under the Apache 2.0 license.
 
 [1]: https://igniterealtime.org/projects/openfire/index.jsp

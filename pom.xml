@@ -4,7 +4,7 @@
 
 	<groupId>org.igniterealtime</groupId>
 	<artifactId>rest-api-client</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>REST API Client for Openfire</name>
 	<url>https://github.com/Redor/REST-API-Client</url>
 	<description>Java REST API Client for the Openfire to manage Openfire instances by sending an REST/HTTP request to the server</description>
@@ -43,9 +43,14 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
+			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>1.18</version>
+			<version>2.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-jaxb</artifactId>
+			<version>2.21</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
