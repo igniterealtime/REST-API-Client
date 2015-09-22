@@ -23,7 +23,7 @@ The project is available through the central Maven Repository
 <dependency>
     <groupId>org.igniterealtime</groupId>
     <artifactId>rest-api-client</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 #### Gradle / Grails
