@@ -5,7 +5,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
@@ -14,28 +13,27 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.internal.util.Base64;
 import org.igniterealtime.restclient.entity.AuthenticationMode;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.exception.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.GZIPContentEncodingFilter;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.client.urlconnection.HTTPSProperties;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * The Class RestClient.
@@ -44,12 +42,6 @@ public final class RestClient {
 
 	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
-
-	/** The Constant METHOD_PUT. */
-	public static final String METHOD_PUT = "PUT";
-
-	/** The Constant METHOD_POST. */
-	public static final String METHOD_POST = "POST";
 
 	/** The uri. */
 	private String baseURI;
@@ -64,7 +56,7 @@ public final class RestClient {
 	private int connectionTimeout;
 
 	/** The headers. */
-	private Map<String, String> headers;
+	private MultivaluedMap<String, Object> headers;
 
 	/**
 	 * Gets the.
@@ -73,33 +65,14 @@ public final class RestClient {
 	 *            the generic type
 	 * @param restPath
 	 *            the rest path
-	 * @param clazz
-	 *            the clazz
+	 * @param expectedResponse
+	 *            the expected response
 	 * @param queryParams
 	 *            the query params
 	 * @return the t
 	 */
-	public <T> T get(String restPath, Class<T> clazz, Map<String, String> queryParams) {
-		Builder builder = getRequestBuilder(restPath, queryParams);
-
-		ClientResponse cr = null;
-		try {
-			cr = builder.get(ClientResponse.class);
-		} catch (ClientHandlerException e) {
-			LOG.error("Error", e);
-		}
-
-		// if the client response is expected back, stop here and return the
-		// client response directly
-		if (clazz.getName().equals(ClientResponse.class.getName())) {
-			return (T) cr;
-		}
-
-		if (cr != null && isStatusCodeOK(cr, restPath)) {
-			return (T) cr.getEntity(clazz);
-		}
-
-		return null;
+	public <T> T get(String restPath, Class<T> expectedResponse, Map<String, String> queryParams) {
+		return call(HttpMethod.GET, restPath, expectedResponse, null, queryParams);
 	}
 
 	/**
@@ -111,11 +84,11 @@ public final class RestClient {
 	 *            the payload
 	 * @param queryParams
 	 *            the query params
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean post(String restPath, Object payload, Map<String, String> queryParams) {
+	public Response post(String restPath, Object payload, Map<String, String> queryParams) {
 		LOG.debug("POST: {}", restPath);
-		return postOrPut(METHOD_POST, restPath, payload, queryParams);
+		return call(HttpMethod.POST, restPath, Response.class, payload, queryParams);
 	}
 
 	/**
@@ -127,11 +100,11 @@ public final class RestClient {
 	 *            the payload
 	 * @param queryParams
 	 *            the query params
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean put(String restPath, Object payload, Map<String, String> queryParams) {
+	public Response put(String restPath, Object payload, Map<String, String> queryParams) {
 		LOG.debug("PUT: {}", restPath);
-		return postOrPut(METHOD_PUT, restPath, payload, queryParams);
+		return call(HttpMethod.PUT, restPath, Response.class, payload, queryParams);
 	}
 
 	/**
@@ -141,126 +114,112 @@ public final class RestClient {
 	 *            the rest path
 	 * @param queryParams
 	 *            the query params
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean delete(String restPath, Map<String, String> queryParams) {
+	public Response delete(String restPath, Map<String, String> queryParams) {
 		LOG.debug("DELETE: {}", restPath);
-		Builder builder = getRequestBuilder(restPath, queryParams);
-		ClientResponse cr = null;
-		try {
-			cr = builder.delete(ClientResponse.class);
-		} catch (ClientHandlerException e) {
-			LOG.error("ClientHandlerException", e);
-		}
-
-		if (cr != null && isStatusCodeOK(cr, restPath)) {
-			return true;
-		}
-		return false;
+		return call(HttpMethod.DELETE, restPath, Response.class, null, queryParams);
 	}
 
 	/**
-	 * Post or put.
+	 * Gets the.
 	 *
-	 * @param method
-	 *            the method
+	 * @param <T>
+	 *            the generic type
+	 * @param methodName
+	 *            the method name
 	 * @param restPath
 	 *            the rest path
+	 * @param expectedResponse
+	 *            the clazz
 	 * @param payload
 	 *            the payload
 	 * @param queryParams
 	 *            the query params
-	 * @return true, if successful
+	 * @return the t
 	 */
-	private boolean postOrPut(String method, String restPath, Object payload,
+	public <T> T call(String methodName, String restPath, Class<T> expectedResponse, Object payload,
 			Map<String, String> queryParams) {
-		Builder builder = getRequestBuilder(restPath, queryParams);
-		ClientResponse cr = null;
-		try {
-			if (method.equals(METHOD_PUT)) {
-				cr = builder.put(ClientResponse.class, payload);
-			} else if (method.equals(METHOD_POST)) {
-				cr = builder.post(ClientResponse.class, payload);
-			}
-		} catch (ClientHandlerException e) {
-			LOG.error("ClientHandlerException", e);
+		WebTarget webTarget = createWebTarget(restPath, queryParams);
+
+		Response result = webTarget.request().headers(headers).method(
+				methodName.toString(),
+				Entity.entity(payload, MediaType.APPLICATION_XML),
+				Response.class);
+
+		if (expectedResponse.getName().equals(Response.class.getName())) {
+			return (T) result;
 		}
 
-		if (cr != null && isStatusCodeOK(cr, restPath)) {
-			return true;
+		if (result != null && result.hasEntity() && isStatusCodeOK(result, restPath)) {
+			return (T) result.readEntity(expectedResponse);
 		}
-		return false;
+
+		return null;
 	}
 
 	/**
 	 * Checks if is status code ok.
 	 *
-	 * @param cr
-	 *            the cr
+	 * @param response
+	 *            the response
 	 * @param uri
 	 *            the uri
-	 * @return true, if checks if is status code ok
+	 * @return true, if is status code ok
 	 */
-	private boolean isStatusCodeOK(ClientResponse cr, String uri) {
-		if (cr.getStatus() == Status.OK.getStatusCode() || cr.getStatus() == Status.CREATED.getStatusCode()) {
+	private boolean isStatusCodeOK(Response response, String uri) {
+		if (response.getStatus() == Status.OK.getStatusCode()
+				|| response.getStatus() == Status.CREATED.getStatusCode()) {
 			return true;
-		} else if (cr.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
-			LOG.error("UNAUTHORIZED: Your credentials are wrong. Please check your username/password or the secret key");
-		} else if (cr.getStatus() == Status.CONFLICT.getStatusCode()
-				|| cr.getStatus() == Status.NOT_FOUND.getStatusCode()
-				|| cr.getStatus() == Status.FORBIDDEN.getStatusCode()
-				|| cr.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
-			ErrorResponse errorResponse = (ErrorResponse) cr.getEntity(ErrorResponse.class);
+		} else if (response.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
+			LOG.error(
+					"UNAUTHORIZED: Your credentials are wrong. Please check your username/password or the secret key");
+		} else if (response.getStatus() == Status.CONFLICT.getStatusCode()
+				|| response.getStatus() == Status.NOT_FOUND.getStatusCode()
+				|| response.getStatus() == Status.FORBIDDEN.getStatusCode()
+				|| response.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
+			ErrorResponse errorResponse = (ErrorResponse) response.getEntity();
 			LOG.error("{} - {} on ressource {}", errorResponse.getException(), errorResponse.getMessage(),
 					errorResponse.getRessource());
 		} else {
-			LOG.error("Unsupported status code: " + cr);
+			LOG.error("Unsupported status code: " + response);
 		}
-		LOG.error(cr.toString());
+		LOG.error(response.toString());
 
 		return false;
 	}
 
 	/**
-	 * Gets the request builder.
+	 * Creates the web target.
 	 *
 	 * @param restPath
 	 *            the rest path
 	 * @param queryParams
 	 *            the query params
-	 * @return the request builder
+	 * @return the web target
 	 */
-	private Builder getRequestBuilder(String restPath, Map<String, String> queryParams) {
-		// Convert query params to multivalued map for direct use with web
-		// resource
-		MultivaluedMapImpl queryParamsMVMap = new MultivaluedMapImpl();
-		if (queryParams != null && !queryParams.isEmpty()) {
-			for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-				if (entry.getKey() != null && entry.getValue() != null) {
-					LOG.debug("PARAM: {} = {}", entry.getKey(), entry.getValue());
-					queryParamsMVMap.add(entry.getKey(), entry.getValue());
-				}
-			}
-		}
-
+	private WebTarget createWebTarget(String restPath, Map<String, String> queryParams) {
+		WebTarget webTarget;
 		try {
 			URI u = new URI(this.baseURI + "/plugins/restapi/v1/" + restPath);
 			Client client = createrRestClient();
 
-			WebResource res = client.resource(u).queryParams(queryParamsMVMap);
-			Builder requestBuilder = res.getRequestBuilder();
-
-			for (Map.Entry<String, String> entry : this.headers.entrySet()) {
-				LOG.debug("HEADER: {} = {}", entry.getKey(), entry.getValue());
-				requestBuilder = res.getRequestBuilder().header(entry.getKey(), entry.getValue());
+			webTarget = client.target(u);
+			if (queryParams != null && !queryParams.isEmpty()) {
+				for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+					if (entry.getKey() != null && entry.getValue() != null) {
+						LOG.debug("PARAM: {} = {}", entry.getKey(), entry.getValue());
+						webTarget = webTarget.queryParam(entry.getKey(), entry.getValue());
+					}
+				}
 			}
 
-			requestBuilder.accept(MediaType.APPLICATION_XML);
-			return requestBuilder;
 		} catch (Exception e) {
 			LOG.error("Error", e);
 			return null;
 		}
+
+		return webTarget;
 	}
 
 	/**
@@ -286,56 +245,39 @@ public final class RestClient {
 	 *             the no such algorithm exception
 	 */
 	private Client createrRestClient() throws KeyManagementException, NoSuchAlgorithmException {
-		ClientConfig clientConfig = createClientConfiguration();
+		ClientConfig clientConfig = new ClientConfig();
 
-		Client client = Client.create(clientConfig);
-
-		// Set GZIP
-		client.addFilter(new GZIPContentEncodingFilter(false));
-		// Set Logging
-		client.addFilter(new LoggingFilter());
 		// Set connection timeout
 		if (this.connectionTimeout != 0) {
-			client.setConnectTimeout(this.connectionTimeout);
+			clientConfig.property(ClientProperties.CONNECT_TIMEOUT, this.connectionTimeout);
+			clientConfig.property(ClientProperties.READ_TIMEOUT, this.connectionTimeout);
 		}
-		// Set HTTP BASIC AUTH
-		if (token.getAuthMode() == AuthenticationMode.BASIC_AUTH) {
-			client.addFilter(new HTTPBasicAuthFilter(token.getUsername(), token.getPassword()));
+		// Set Logging Filter
+		clientConfig.register(new LoggingFilter());
+
+		Client client = null;
+		if (this.baseURI.startsWith("https")) {
+			client = createSLLClient(clientConfig);
+		} else {
+			client = ClientBuilder.newClient(clientConfig);
 		}
 
 		return client;
 	}
 
 	/**
-	 * Creates the client configuration.
+	 * Creates the sll client.
 	 *
+	 * @param clientConfig
+	 *            the client config
 	 * @return the client config
 	 * @throws KeyManagementException
 	 *             the key management exception
 	 * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	private ClientConfig createClientConfiguration() throws KeyManagementException, NoSuchAlgorithmException {
-		ClientConfig clientConfig;
-
-		if (this.baseURI.startsWith("https")) {
-			clientConfig = createSLLClientConfig();
-		} else {
-			clientConfig = new DefaultClientConfig();
-		}
-		return clientConfig;
-	}
-
-	/**
-	 * Creates the sll client config.
-	 *
-	 * @return the client config
-	 * @throws KeyManagementException
-	 *             the key management exception
-	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
-	 */
-	private ClientConfig createSLLClientConfig() throws KeyManagementException, NoSuchAlgorithmException {
+	private Client createSLLClient(ClientConfig clientConfig)
+			throws KeyManagementException, NoSuchAlgorithmException {
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
@@ -352,15 +294,18 @@ public final class RestClient {
 		sc.init(null, trustAllCerts, new SecureRandom());
 		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-		ClientConfig config = new DefaultClientConfig();
-		config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-				new HTTPSProperties(new HostnameVerifier() {
+		ClientBuilder.newClient(clientConfig);
+
+		Client client = ClientBuilder.newBuilder()
+				.sslContext(sc)
+				.hostnameVerifier(new HostnameVerifier() {
 					public boolean verify(String s, SSLSession sslSession) {
 						return true;
 					}
-				}, sc));
+				})
+				.withConfig(clientConfig).build();
 
-		return config;
+		return client;
 	}
 
 	/**
@@ -375,7 +320,7 @@ public final class RestClient {
 		private int connectionTimeout;
 
 		/** The headers. */
-		private Map<String, String> headers;
+		private MultivaluedMap<String, Object> headers;
 
 		/** The token. */
 		private AuthenticationToken token;
@@ -387,7 +332,7 @@ public final class RestClient {
 		 *            the base uri
 		 */
 		public RestClientBuilder(String baseUri) {
-			this.headers = new HashMap<String, String>();
+			this.headers = new MultivaluedHashMap<String, Object>();
 			this.baseURI = baseUri;
 		}
 
@@ -412,8 +357,12 @@ public final class RestClient {
 		 */
 		public RestClientBuilder authenticationToken(AuthenticationToken token) {
 			if (token.getAuthMode() == AuthenticationMode.SHARED_SECRET_KEY) {
-				headers.put(HttpHeaders.AUTHORIZATION, token.getSharedSecretKey());
+				headers.add(HttpHeaders.AUTHORIZATION, token.getSharedSecretKey());
+			} else if (token.getAuthMode() == AuthenticationMode.BASIC_AUTH) {
+				String base64 = Base64.encodeAsString(token.getUsername() + ":" + token.getPassword());
+				headers.add(HttpHeaders.AUTHORIZATION, "Basic " + base64);
 			}
+
 			this.token = token;
 			return this;
 		}
@@ -425,7 +374,7 @@ public final class RestClient {
 		 *            the headers
 		 * @return the rest client builder
 		 */
-		public RestClientBuilder headers(Map<String, String> headers) {
+		public RestClientBuilder headers(MultivaluedMap<String, Object> headers) {
 			this.headers = headers;
 			return this;
 		}
@@ -499,25 +448,6 @@ public final class RestClient {
 	}
 
 	/**
-	 * Gets the headers.
-	 *
-	 * @return the headers
-	 */
-	public Map<String, String> getHeaders() {
-		return headers;
-	}
-
-	/**
-	 * Sets the headers.
-	 *
-	 * @param headers
-	 *            the headers
-	 */
-	public void setHeaders(Map<String, String> headers) {
-		this.headers = headers;
-	}
-
-	/**
 	 * Gets the token.
 	 *
 	 * @return the token
@@ -534,6 +464,25 @@ public final class RestClient {
 	 */
 	public void setToken(AuthenticationToken token) {
 		this.token = token;
+	}
+
+	/**
+	 * Gets the headers.
+	 *
+	 * @return the headers
+	 */
+	public MultivaluedMap<String, Object> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Sets the headers.
+	 *
+	 * @param headers
+	 *            the headers
+	 */
+	public void setHeaders(MultivaluedMap<String, Object> headers) {
+		this.headers = headers;
 	}
 
 }

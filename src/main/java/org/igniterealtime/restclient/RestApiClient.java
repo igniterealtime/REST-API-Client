@@ -3,6 +3,8 @@ package org.igniterealtime.restclient;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.core.Response;
+
 import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.entity.GroupEntities;
@@ -84,9 +86,9 @@ public class RestApiClient {
 	 *
 	 * @param userEntity
 	 *            the user entity
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean createUser(UserEntity userEntity) {
+	public Response createUser(UserEntity userEntity) {
 		return restClient.post("users", userEntity, new HashMap<String, String>());
 	}
 
@@ -95,9 +97,9 @@ public class RestApiClient {
 	 *
 	 * @param userEntity
 	 *            the user entity
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean updateUser(UserEntity userEntity) {
+	public Response updateUser(UserEntity userEntity) {
 		return restClient.put("users/" + userEntity.getUsername(), userEntity, new HashMap<String, String>());
 	}
 
@@ -106,9 +108,9 @@ public class RestApiClient {
 	 *
 	 * @param username
 	 *            the username
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean deleteUser(String username) {
+	public Response deleteUser(String username) {
 		return restClient.delete("users/" + username, new HashMap<String, String>());
 	}
 
@@ -148,9 +150,9 @@ public class RestApiClient {
 	 *
 	 * @param chatRoom
 	 *            the chat room
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean createChatRoom(MUCRoomEntity chatRoom) {
+	public Response createChatRoom(MUCRoomEntity chatRoom) {
 		return restClient.post("chatrooms", chatRoom, new HashMap<String, String>());
 	}
 
@@ -159,9 +161,9 @@ public class RestApiClient {
 	 *
 	 * @param chatRoom
 	 *            the chat room
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean updateChatRoom(MUCRoomEntity chatRoom) {
+	public Response updateChatRoom(MUCRoomEntity chatRoom) {
 		return restClient.put("chatrooms/" + chatRoom.getRoomName(), chatRoom, new HashMap<String, String>());
 	}
 
@@ -170,20 +172,22 @@ public class RestApiClient {
 	 *
 	 * @param roomName
 	 *            the room name
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean deleteChatRoom(String roomName) {
+	public Response deleteChatRoom(String roomName) {
 		return restClient.delete("chatrooms/" + roomName, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the chat room participants.
 	 *
-	 * @param roomName the room name
+	 * @param roomName
+	 *            the room name
 	 * @return the chat room participants
 	 */
 	public ParticipantEntities getChatRoomParticipants(String roomName) {
-		return restClient.get("chatrooms/" + roomName + "/participants", ParticipantEntities.class, new HashMap<String, String>());
+		return restClient.get("chatrooms/" + roomName + "/participants", ParticipantEntities.class,
+				new HashMap<String, String>());
 	}
 
 	/**
@@ -193,9 +197,9 @@ public class RestApiClient {
 	 *            the room name
 	 * @param jid
 	 *            the jid
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean addOwner(String roomName, String jid) {
+	public Response addOwner(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/owners/" + jid, null, new HashMap<String, String>());
 	}
 
@@ -206,9 +210,9 @@ public class RestApiClient {
 	 *            the room name
 	 * @param jid
 	 *            the jid
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean addAdmin(String roomName, String jid) {
+	public Response addAdmin(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/admins/" + jid, null, new HashMap<String, String>());
 	}
 
@@ -219,9 +223,9 @@ public class RestApiClient {
 	 *            the room name
 	 * @param jid
 	 *            the jid
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean addMember(String roomName, String jid) {
+	public Response addMember(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/members/" + jid, null, new HashMap<String, String>());
 	}
 
@@ -232,9 +236,9 @@ public class RestApiClient {
 	 *            the room name
 	 * @param jid
 	 *            the jid
-	 * @return true, if successful
+	 * @return the response
 	 */
-	public boolean addOutcast(String roomName, String jid) {
+	public Response addOutcast(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/outcasts/" + jid, null, new HashMap<String, String>());
 	}
 
@@ -261,52 +265,55 @@ public class RestApiClient {
 				new HashMap<String, String>());
 		return sessionEntities;
 	}
-	
+
 	/**
 	 * Gets the user groups.
 	 *
-	 * @param username the username
+	 * @param username
+	 *            the username
 	 * @return the user groups
 	 */
 	public UserGroupsEntity getUserGroups(String username) {
 		return restClient.get("users/" + username + "/groups", UserGroupsEntity.class,
 				new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Adds the user to groups.
 	 *
-	 * @param username the username
-	 * @param userGroupsEntity the user groups entity
-	 * @return true, if adds the user to groups
+	 * @param username
+	 *            the username
+	 * @param userGroupsEntity
+	 *            the user groups entity
+	 * @return the response
 	 */
-	public boolean addUserToGroups(String username, UserGroupsEntity userGroupsEntity) {
+	public Response addUserToGroups(String username, UserGroupsEntity userGroupsEntity) {
 		return restClient.post("users/" + username + "/groups", userGroupsEntity,
 				new HashMap<String, String>());
 	}
-	
-	
+
 	/**
-	 * Lockout/Ban a user from openfire.
+	 * Lockout user.
 	 *
-	 * @param username the username
-	 * @return true, if lockout user
+	 * @param username
+	 *            the username
+	 * @return the response
 	 */
-	public boolean lockoutUser(String username) {
+	public Response lockoutUser(String username) {
 		return restClient.post("lockouts/" + username, null, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Unlock user.
 	 *
-	 * @param username the username
-	 * @return true, if unlock user
+	 * @param username
+	 *            the username
+	 * @return the response
 	 */
-	public boolean unlockUser(String username) {
+	public Response unlockUser(String username) {
 		return restClient.delete("lockouts/" + username, new HashMap<String, String>());
 	}
-	
-	
+
 	/**
 	 * Gets the system properties.
 	 *
@@ -316,48 +323,52 @@ public class RestApiClient {
 		return restClient.get("system/properties", SystemProperties.class,
 				new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the system property.
 	 *
-	 * @param propertyName the property name
+	 * @param propertyName
+	 *            the property name
 	 * @return the system property
 	 */
 	public SystemProperty getSystemProperty(String propertyName) {
 		return restClient.get("system/properties/" + propertyName, SystemProperty.class,
 				new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Creates the system property.
 	 *
-	 * @param property the property
-	 * @return true, if creates the system property
+	 * @param property
+	 *            the property
+	 * @return the response
 	 */
-	public boolean createSystemProperty(SystemProperty property) {
+	public Response createSystemProperty(SystemProperty property) {
 		return restClient.post("system/properties", property, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Update system property.
 	 *
-	 * @param property the property
-	 * @return true, if update system property
+	 * @param property
+	 *            the property
+	 * @return the response
 	 */
-	public boolean updateSystemProperty(SystemProperty property) {
+	public Response updateSystemProperty(SystemProperty property) {
 		return restClient.put("system/properties/" + property.getKey(), property, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Delete system property.
 	 *
-	 * @param propertyName the property name
-	 * @return true, if delete system property
+	 * @param propertyName
+	 *            the property name
+	 * @return the response
 	 */
-	public boolean deleteSystemProperty(String propertyName) {
+	public Response deleteSystemProperty(String propertyName) {
 		return restClient.delete("system/properties/" + propertyName, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the groups.
 	 *
@@ -366,90 +377,102 @@ public class RestApiClient {
 	public GroupEntities getGroups() {
 		return restClient.get("groups", GroupEntities.class, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the group.
 	 *
-	 * @param groupName the group name
+	 * @param groupName
+	 *            the group name
 	 * @return the group
 	 */
 	public GroupEntity getGroup(String groupName) {
 		return restClient.get("groups/" + groupName, GroupEntity.class, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Creates the group.
 	 *
-	 * @param group the group
-	 * @return true, if creates the group
+	 * @param group
+	 *            the group
+	 * @return the response
 	 */
-	public boolean createGroup(GroupEntity group) {
+	public Response createGroup(GroupEntity group) {
 		return restClient.post("groups", group, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Update group.
 	 *
-	 * @param group the group
-	 * @return true, if update group
+	 * @param group
+	 *            the group
+	 * @return the response
 	 */
-	public boolean updateGroup(GroupEntity group) {
+	public Response updateGroup(GroupEntity group) {
 		return restClient.put("groups/" + group.getName(), group, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Delete group.
 	 *
-	 * @param groupName the group name
-	 * @return true, if delete group
+	 * @param groupName
+	 *            the group name
+	 * @return the response
 	 */
-	public boolean deleteGroup(String groupName) {
+	public Response deleteGroup(String groupName) {
 		return restClient.delete("groups/" + groupName, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the roster.
 	 *
-	 * @param username the username
+	 * @param username
+	 *            the username
 	 * @return the roster
 	 */
 	public RosterEntities getRoster(String username) {
 		return restClient.get("users/" + username + "/roster", RosterEntities.class, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Adds the roster entry.
 	 *
-	 * @param username the username
-	 * @param rosterItemEntity the roster item entity
-	 * @return true, if adds the roster entry
+	 * @param username
+	 *            the username
+	 * @param rosterItemEntity
+	 *            the roster item entity
+	 * @return the response
 	 */
-	public boolean addRosterEntry(String username, RosterItemEntity rosterItemEntity) {
+	public Response addRosterEntry(String username, RosterItemEntity rosterItemEntity) {
 		return restClient.post("users/" + username + "/roster", rosterItemEntity, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Update roster entry.
 	 *
-	 * @param username the username
-	 * @param rosterItemEntity the roster item entity
-	 * @return true, if update roster entry
+	 * @param username
+	 *            the username
+	 * @param rosterItemEntity
+	 *            the roster item entity
+	 * @return the response
 	 */
-	public boolean updateRosterEntry(String username, RosterItemEntity rosterItemEntity) {
-		return restClient.put("users/" + username + "/roster/" + rosterItemEntity.getJid(), rosterItemEntity, new HashMap<String, String>());
+	public Response updateRosterEntry(String username, RosterItemEntity rosterItemEntity) {
+		return restClient.put("users/" + username + "/roster/" + rosterItemEntity.getJid(), rosterItemEntity,
+				new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Delete roster entry.
 	 *
-	 * @param username the username
-	 * @param jid the jid
-	 * @return true, if delete roster entry
+	 * @param username
+	 *            the username
+	 * @param jid
+	 *            the jid
+	 * @return the response
 	 */
-	public boolean deleteRosterEntry(String username, String jid) {
+	public Response deleteRosterEntry(String username, String jid) {
 		return restClient.delete("users/" + username + "/roster/" + jid, new HashMap<String, String>());
 	}
-	
+
 	/**
 	 * Gets the rest client.
 	 *
