@@ -28,7 +28,7 @@ The project is available through the central Maven Repository
 ```
 #### Gradle / Grails
 ```xml
-compile 'org.igniterealtime:rest-api-client:1.0.0'
+compile 'org.igniterealtime:rest-api-client:1.1.1'
 ```
 
 ## Dependencies
