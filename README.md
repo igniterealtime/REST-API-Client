@@ -12,6 +12,7 @@ REST API Client cover all available REST API plugin features.
 * [X] Get overview over all or specific group and to create, update or delete a group
 * [X] Get overview over all user roster entries and to add, update or delete a roster entry
 * [X] Add user to a group
+* [X] Remove user from a group
 * [X] Lockout or unlock the user (enable / disable)
 * [X] Get overview over all or specific system properties and to create, update or delete system property
 
@@ -23,12 +24,12 @@ The project is available through the central Maven Repository
 <dependency>
     <groupId>org.igniterealtime</groupId>
     <artifactId>rest-api-client</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 #### Gradle / Grails
 ```xml
-compile 'org.igniterealtime:rest-api-client:1.1.1'
+compile 'org.igniterealtime:rest-api-client:1.1.2'
 ```
 
 ## Dependencies
