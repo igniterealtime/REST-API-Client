@@ -84,12 +84,18 @@ REST API Plugin provides two types of authentication.
   // Get all user groups from a user
   restApiCient.getUserGroups("testUsername");
 
-  // Add new groups to a user
+  // Add user to groups
   List<String> groupNames = new ArrayList<String>();
   groupNames.add("Moderators");
   groupNames.add("Supporters");
   UserGroupsEntity userGroupsEntity = new UserGroupsEntity(groupNames);
   restApiClient.addUserToGroups("testUsername", userGroupsEntity);
+  
+  // Add user to group
+  restApiClient.addUserToGroup("testUsername", "Moderators");
+  
+  // Delete user from a group
+  restApiClient.deleteUserFromGroup("testUsername", "Moderators");
 
   // Lockout/Ban a user
   restApiClient.lockoutUser("testUsername");

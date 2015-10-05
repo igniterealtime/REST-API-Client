@@ -288,9 +288,34 @@ public class RestApiClient {
 	 * @return the response
 	 */
 	public Response addUserToGroups(String username, UserGroupsEntity userGroupsEntity) {
-		return restClient.post("users/" + username + "/groups", userGroupsEntity,
+		return restClient.post("users/" + username + "/groups/", userGroupsEntity,
 				new HashMap<String, String>());
 	}
+	
+	/**
+	 * Adds the user to group.
+	 *
+	 * @param username the username
+	 * @param groupName the group name
+	 * @return the response
+	 */
+	public Response addUserToGroup(String username, String groupName) {
+		return restClient.post("users/" + username + "/groups/"+ groupName, null,
+				new HashMap<String, String>());
+	}
+	
+	/**
+	 * Delete user from group.
+	 *
+	 * @param username the username
+	 * @param groupName the group name
+	 * @return the response
+	 */
+	public Response deleteUserFromGroup(String username, String groupName) {
+		return restClient.delete("users/" + username + "/groups/" + groupName,
+				new HashMap<String, String>());
+	}
+	
 
 	/**
 	 * Lockout user.
