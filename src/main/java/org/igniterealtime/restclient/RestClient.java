@@ -178,7 +178,7 @@ public final class RestClient {
 				|| response.getStatus() == Status.NOT_FOUND.getStatusCode()
 				|| response.getStatus() == Status.FORBIDDEN.getStatusCode()
 				|| response.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
-			ErrorResponse errorResponse = (ErrorResponse) response.getEntity();
+			ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
 			LOG.error("{} - {} on ressource {}", errorResponse.getException(), errorResponse.getMessage(),
 					errorResponse.getRessource());
 		} else {
