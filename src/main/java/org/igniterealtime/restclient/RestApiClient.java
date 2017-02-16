@@ -265,6 +265,16 @@ public class RestApiClient {
 				new HashMap<String, String>());
 		return sessionEntities;
 	}
+	
+	/**
+	 * Close all user sessions
+	 *
+	 * @param username the username
+	 * @return the response
+	 */
+	public Response deleteSessions(String username) {
+		return restClient.delete("sessions/" + username, new HashMap<String, String>());
+	}
 
 	/**
 	 * Gets the user groups.
