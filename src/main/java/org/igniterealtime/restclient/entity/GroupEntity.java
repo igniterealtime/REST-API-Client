@@ -1,14 +1,16 @@
 package org.igniterealtime.restclient.entity;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
 /**
  * The Class GroupEntity.
  */
 @XmlRootElement(name = "group")
-@XmlType(propOrder = { "name", "description" })
+@XmlType(propOrder = { "name", "description" ,"admins" ,"members" })
 public class GroupEntity {
 
 	/** The name. */
@@ -16,6 +18,10 @@ public class GroupEntity {
 
 	/** The description. */
 	private String description;
+
+	private List<String> admins;
+
+	private List<String> members;
 
 	/**
 	 * Instantiates a new group entity.
@@ -34,6 +40,13 @@ public class GroupEntity {
 	public GroupEntity(String name, String description) {
 		this.name = name;
 		this.description = description;
+	}
+
+	public GroupEntity(String name,String description,List<String> admins,List<String> members){
+		this.name=name;
+		this.description=description;
+		this.admins=admins;
+		this.members=members;
 	}
 
 	/**
@@ -76,4 +89,23 @@ public class GroupEntity {
 		this.description = description;
 	}
 
+	@XmlElementWrapper(name = "admins")
+	@XmlElement(name = "admin")
+	public List<String> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<String> admins) {
+		this.admins = admins;
+	}
+
+	@XmlElementWrapper(name = "members")
+	@XmlElement(name = "member")
+	public List<String> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<String> members) {
+		this.members = members;
+	}
 }
