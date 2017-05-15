@@ -202,6 +202,20 @@ public class RestApiClient {
 	public Response addOwner(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/owners/" + jid, null, new HashMap<String, String>());
 	}
+	
+	/**
+	 * Delete owner from chatroom.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return the response
+	 */
+	public Response deleteOwner(String roomName, String jid) {
+		return restClient.delete("chatrooms/" + roomName + "/owners/" + jid,
+				new HashMap<String, String>());
+	}
 
 	/**
 	 * Adds the admin.
@@ -217,6 +231,20 @@ public class RestApiClient {
 	}
 
 	/**
+	 * Delete admin from chatroom.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return the response
+	 */
+	public Response deleteAdmin(String roomName, String jid) {
+		return restClient.delete("chatrooms/" + roomName + "/admins/" + jid,
+				new HashMap<String, String>());
+	}
+	
+	/**
 	 * Adds the member.
 	 *
 	 * @param roomName
@@ -230,6 +258,20 @@ public class RestApiClient {
 	}
 
 	/**
+	 * Delete member from chatroom.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return the response
+	 */
+	public Response deleteMember(String roomName, String jid) {
+		return restClient.delete("chatrooms/" + roomName + "/members/" + jid,
+				new HashMap<String, String>());
+	}
+	
+	/**
 	 * Adds the outcast.
 	 *
 	 * @param roomName
@@ -240,6 +282,20 @@ public class RestApiClient {
 	 */
 	public Response addOutcast(String roomName, String jid) {
 		return restClient.post("chatrooms/" + roomName + "/outcasts/" + jid, null, new HashMap<String, String>());
+	}
+	
+	/**
+	 * Delete outcast from chatroom.
+	 *
+	 * @param roomName
+	 *            the room name
+	 * @param jid
+	 *            the jid
+	 * @return the response
+	 */
+	public Response deleteOutcast(String roomName, String jid) {
+		return restClient.delete("chatrooms/" + roomName + "/outcasts/" + jid,
+				new HashMap<String, String>());
 	}
 
 	/**
