@@ -13,7 +13,10 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.HttpMethod;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -27,7 +30,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.internal.util.Base64;
 import org.igniterealtime.restclient.entity.AuthenticationMode;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
@@ -138,24 +140,25 @@ public final class RestClient {
 	 *            the query params
 	 * @return the t
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T call(String methodName, String restPath, Class<T> expectedResponse, Object payload,
 			Map<String, String> queryParams) {
 		WebTarget webTarget = createWebTarget(restPath, queryParams);
 
-		Response result = webTarget.request().headers(headers).method(
+		Response result = webTarget.request().headers(headers).accept(MediaType.APPLICATION_XML_TYPE).method(
 				methodName.toString(),
-				Entity.entity(payload, MediaType.APPLICATION_XML),
+				Entity.entity(payload, MediaType.APPLICATION_XML_TYPE),
 				Response.class);
 
 		if (expectedResponse.getName().equals(Response.class.getName())) {
 			return (T) result;
 		}
-
-		if (result != null && result.hasEntity() && isStatusCodeOK(result, restPath)) {
+		
+		if (result != null && isStatusCodeOK(result, restPath)) {
 			return (T) result.readEntity(expectedResponse);
 		}
 
-		return null;
+		throw new WebApplicationException("Unhandled response", result);
 	}
 
 	/**
@@ -172,21 +175,17 @@ public final class RestClient {
 				|| response.getStatus() == Status.CREATED.getStatusCode()) {
 			return true;
 		} else if (response.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
-			LOG.error(
-					"UNAUTHORIZED: Your credentials are wrong. Please check your username/password or the secret key");
+			throw new NotAuthorizedException("UNAUTHORIZED: Your credentials are wrong. "
+					+ "Please check your username/password or the secret key.", response);
 		} else if (response.getStatus() == Status.CONFLICT.getStatusCode()
 				|| response.getStatus() == Status.NOT_FOUND.getStatusCode()
 				|| response.getStatus() == Status.FORBIDDEN.getStatusCode()
 				|| response.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
 			ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
-			LOG.error("{} - {} on ressource {}", errorResponse.getException(), errorResponse.getMessage(),
-					errorResponse.getRessource());
+			throw new ClientErrorException(errorResponse.toString(), response);
 		} else {
-			LOG.error("Unsupported status code: " + response);
+			throw new WebApplicationException("Unsupported status", response);
 		}
-		LOG.error(response.toString());
-
-		return false;
 	}
 
 	/**
@@ -215,8 +214,7 @@ public final class RestClient {
 			}
 
 		} catch (Exception e) {
-			LOG.error("Error", e);
-			return null;
+			throw new IllegalArgumentException("Something went wrong by creating the client: " + e);
 		}
 
 		return webTarget;
@@ -252,8 +250,6 @@ public final class RestClient {
 			clientConfig.property(ClientProperties.CONNECT_TIMEOUT, this.connectionTimeout);
 			clientConfig.property(ClientProperties.READ_TIMEOUT, this.connectionTimeout);
 		}
-		// Set Logging Filter
-		clientConfig.register(new LoggingFilter());
 
 		Client client = null;
 		if (this.baseURI.startsWith("https")) {
@@ -347,7 +343,7 @@ public final class RestClient {
 			this.connectionTimeout = connectionTimeout;
 			return this;
 		}
-
+		
 		/**
 		 * Authentication token.
 		 *

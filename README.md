@@ -13,6 +13,7 @@ REST API Client cover all available REST API plugin features.
 * [X] Get overview over all user roster entries and to add, update or delete a roster entry
 * [X] Add user to a group
 * [X] Remove user from a group
+* [X] Close all user sessions
 * [X] Lockout or unlock the user (enable / disable)
 * [X] Get overview over all or specific system properties and to create, update or delete system property
 
@@ -238,7 +239,7 @@ REST API Plugin provides two types of authentication.
 ```
 
 ## Copyright and license
-Created and copyright (c) 2015 by Roman Soldatow (roman@soldatow.de).
+Created and copyright (c) 2017 by Roman Soldatow (r.soldatow@gmail).
 REST API Client may be freely distributed under the Apache 2.0 license.
 
 [1]: https://igniterealtime.org/projects/openfire/index.jsp

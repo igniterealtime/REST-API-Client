@@ -40,11 +40,23 @@ public class RestApiClient {
 	 *            the authentication token
 	 */
 	public RestApiClient(String url, int port, AuthenticationToken authenticationToken) {
-		if (!url.startsWith("http")) {
-			url = "http://" + url;
-		}
+		url = adjustURL(url);
 		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
 				.connectionTimeout(5000).build();
+	}
+	
+	/**
+	 * Instantiates a new rest api client.
+	 *
+	 * @param url the url
+	 * @param port the port
+	 * @param authenticationToken the authentication token
+	 * @param connectionTimeout the connection timeout
+	 */
+	public RestApiClient(String url, int port, AuthenticationToken authenticationToken, int connectionTimeout) {
+		url = adjustURL(url);
+		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
+				.connectionTimeout(connectionTimeout).build();
 	}
 
 	/**
@@ -323,7 +335,7 @@ public class RestApiClient {
 	}
 	
 	/**
-	 * Close all user sessions
+	 * Close all user sessions.
 	 *
 	 * @param username the username
 	 * @return the response
@@ -572,5 +584,19 @@ public class RestApiClient {
 	public RestClient getRestClient() {
 		return restClient;
 	}
+	
+	/**
+	 * Adjust URL.
+	 *
+	 * @param url the url
+	 * @return the string
+	 */
+	private String adjustURL(String url) {
+		if (!url.startsWith("http")) {
+			url = "http://" + url;
+		}
+		return url;
+	}
+
 
 }

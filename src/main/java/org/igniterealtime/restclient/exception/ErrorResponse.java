@@ -95,4 +95,10 @@ public class ErrorResponse {
 	public void setExceptionStack(String exceptionStack) {
 		this.exceptionStack = exceptionStack;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorResponse [ressource=" + ressource + ", message=" + message + ", exception=" + exception
+				+ ", exceptionStack=" + exceptionStack + "]";
+	}
 }
