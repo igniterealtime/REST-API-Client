@@ -25,12 +25,12 @@ The project is available through the central Maven Repository
 <dependency>
     <groupId>org.igniterealtime</groupId>
     <artifactId>rest-api-client</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 #### Gradle / Grails
 ```xml
-compile 'org.igniterealtime:rest-api-client:1.1.3'
+compile 'org.igniterealtime:rest-api-client:1.1.4'
 ```
 
 ## Dependencies
