@@ -309,6 +309,115 @@ public class RestApiClient {
 		return restClient.delete("chatrooms/" + roomName + "/outcasts/" + jid,
 				new HashMap<String, String>());
 	}
+	
+	   /**
+     * Adds the owner group.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response addOwnerGroup(String roomName, String groupName) {
+        return restClient.post("chatrooms/" + roomName + "/owners/group/" + groupName, null, new HashMap<String, String>());
+    }
+    
+    /**
+     * Delete owner group from chatroom.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response deleteOwnerGroup(String roomName, String groupName) {
+        return restClient.delete("chatrooms/" + roomName + "/owners/group/" + groupName,
+                new HashMap<String, String>());
+    }
+
+    /**
+     * Adds the group admin.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response addAdminGroup(String roomName, String groupName) {
+        return restClient.post("chatrooms/" + roomName + "/admins/group/" + groupName, null, new HashMap<String, String>());
+    }
+
+    /**
+     * Delete admin group from chatroom.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response deleteAdminGroup(String roomName, String groupName) {
+        return restClient.delete("chatrooms/" + roomName + "/admins/group/" + groupName,
+                new HashMap<String, String>());
+    }
+    
+    /**
+     * Adds the group member.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response addMemberGroup(String roomName, String groupName) {
+        return restClient.post("chatrooms/" + roomName + "/members /group/" + groupName, null, new HashMap<String, String>());
+    }
+
+    /**
+     * Delete member group from chatroom.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response deleteMemberGroup(String roomName, String groupName) {
+        return restClient.delete("chatrooms/" + roomName + "/members /group/" + groupName,
+                new HashMap<String, String>());
+    }
+    
+    /**
+     * Adds the group outcast.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response addOutcastGroup(String roomName, String groupName) {
+        return restClient.post("chatrooms/" + roomName + "/outcasts/group/" + groupName, null, new HashMap<String, String>());
+    }
+    
+    /**
+     * Delete outcast group from chatroom.
+     *
+     * @param roomName
+     *            the room name
+     * @param groupName
+     *            the groupName
+     * @return the response
+     */
+    public Response deleteOutcastGroup(String roomName, String groupName) {
+        return restClient.delete("chatrooms/" + roomName + "/outcasts/group/" + groupName,
+                new HashMap<String, String>());
+    }
+
 
 	/**
 	 * Gets the sessions.
