@@ -374,7 +374,7 @@ public class RestApiClient {
      * @return the response
      */
     public Response addMemberGroup(String roomName, String groupName) {
-        return restClient.post("chatrooms/" + roomName + "/members /group/" + groupName, null, new HashMap<String, String>());
+        return restClient.post("chatrooms/" + roomName + "/members/group/" + groupName, null, new HashMap<String, String>());
     }
 
     /**
@@ -387,7 +387,7 @@ public class RestApiClient {
      * @return the response
      */
     public Response deleteMemberGroup(String roomName, String groupName) {
-        return restClient.delete("chatrooms/" + roomName + "/members /group/" + groupName,
+        return restClient.delete("chatrooms/" + roomName + "/members/group/" + groupName,
                 new HashMap<String, String>());
     }
     
