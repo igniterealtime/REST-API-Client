@@ -22,17 +22,20 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.ContextResolver;
 
+import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.internal.util.Base64;
+import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
 import org.igniterealtime.restclient.entity.AuthenticationMode;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
+import org.igniterealtime.restclient.enums.SupportedMediaType;
 import org.igniterealtime.restclient.exception.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +62,9 @@ public final class RestClient {
 
 	/** The headers. */
 	private MultivaluedMap<String, Object> headers;
+	
+	/** The media type. */
+	private SupportedMediaType mediaType;
 
 	/**
 	 * Gets the.
@@ -144,10 +150,9 @@ public final class RestClient {
 	public <T> T call(String methodName, String restPath, Class<T> expectedResponse, Object payload,
 			Map<String, String> queryParams) {
 		WebTarget webTarget = createWebTarget(restPath, queryParams);
-
-		Response result = webTarget.request().headers(headers).accept(MediaType.APPLICATION_XML_TYPE).method(
+		Response result = webTarget.request().headers(headers).accept(mediaType.getMediaType()).method(
 				methodName.toString(),
-				Entity.entity(payload, MediaType.APPLICATION_XML_TYPE),
+				Entity.entity(payload, mediaType.getMediaType()),
 				Response.class);
 
 		if (expectedResponse.getName().equals(Response.class.getName())) {
@@ -201,7 +206,7 @@ public final class RestClient {
 		WebTarget webTarget;
 		try {
 			URI u = new URI(this.baseURI + "/plugins/restapi/v1/" + restPath);
-			Client client = createrRestClient();
+			Client client = createRestClient();
 
 			webTarget = client.target(u);
 			if (queryParams != null && !queryParams.isEmpty()) {
@@ -231,6 +236,7 @@ public final class RestClient {
 		this.connectionTimeout = builder.connectionTimeout;
 		this.setHeaders(builder.headers);
 		this.token = builder.token;
+		this.mediaType = builder.mediaType;
 	}
 
 	/**
@@ -242,15 +248,17 @@ public final class RestClient {
 	 * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	private Client createrRestClient() throws KeyManagementException, NoSuchAlgorithmException {
+	private Client createRestClient() throws KeyManagementException, NoSuchAlgorithmException {
 		ClientConfig clientConfig = new ClientConfig();
-
 		// Set connection timeout
 		if (this.connectionTimeout != 0) {
 			clientConfig.property(ClientProperties.CONNECT_TIMEOUT, this.connectionTimeout);
 			clientConfig.property(ClientProperties.READ_TIMEOUT, this.connectionTimeout);
 		}
 
+		
+		clientConfig.register(createMoxyJsonResolver());
+		
 		Client client = null;
 		if (this.baseURI.startsWith("https")) {
 			client = createSLLClient(clientConfig);
@@ -260,6 +268,13 @@ public final class RestClient {
 
 		return client;
 	}
+	
+    public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {
+        return new MoxyJsonConfig()
+        .setAttributePrefix("")
+        .setValueWrapper("value")
+        .property(JAXBContextProperties.JSON_WRAPPER_AS_ARRAY_NAME, true).resolver();
+}
 
 	/**
 	 * Creates the sll client.
@@ -320,6 +335,9 @@ public final class RestClient {
 
 		/** The token. */
 		private AuthenticationToken token;
+		
+		/** The media type. */
+	    private SupportedMediaType mediaType;
 
 		/**
 		 * The Constructor.
@@ -374,6 +392,18 @@ public final class RestClient {
 			this.headers = headers;
 			return this;
 		}
+		
+	     /**
+         *.
+         *
+         * @param mediaType
+         *            the mediaType
+         * @return the rest client builder
+         */
+        public RestClientBuilder mediaType(SupportedMediaType mediaType) {
+            this.mediaType = mediaType;
+            return this;
+        }
 
 		/**
 		 * Builds the.
@@ -481,4 +511,22 @@ public final class RestClient {
 		this.headers = headers;
 	}
 
+	   /**
+     * Gets the mediaType.
+     *
+     * @return the mediaType
+     */
+    public SupportedMediaType getMediaType() {
+        return mediaType;
+    }
+
+    /**
+     * Sets the mediaType.
+     *
+     * @param mediaType
+     *            the mediaType
+     */
+    public void setMediaType(SupportedMediaType mediaType) {
+        this.mediaType = mediaType;
+    }
 }
