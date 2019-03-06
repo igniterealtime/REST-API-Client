@@ -26,10 +26,13 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.ContextResolver;
 
+import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.internal.util.Base64;
+import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
 import org.igniterealtime.restclient.entity.AuthenticationMode;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.enums.SupportedMediaType;
@@ -147,7 +150,6 @@ public final class RestClient {
 	public <T> T call(String methodName, String restPath, Class<T> expectedResponse, Object payload,
 			Map<String, String> queryParams) {
 		WebTarget webTarget = createWebTarget(restPath, queryParams);
-
 		Response result = webTarget.request().headers(headers).accept(mediaType.getMediaType()).method(
 				methodName.toString(),
 				Entity.entity(payload, mediaType.getMediaType()),
@@ -248,13 +250,15 @@ public final class RestClient {
 	 */
 	private Client createRestClient() throws KeyManagementException, NoSuchAlgorithmException {
 		ClientConfig clientConfig = new ClientConfig();
-
 		// Set connection timeout
 		if (this.connectionTimeout != 0) {
 			clientConfig.property(ClientProperties.CONNECT_TIMEOUT, this.connectionTimeout);
 			clientConfig.property(ClientProperties.READ_TIMEOUT, this.connectionTimeout);
 		}
 
+		
+		clientConfig.register(createMoxyJsonResolver());
+		
 		Client client = null;
 		if (this.baseURI.startsWith("https")) {
 			client = createSLLClient(clientConfig);
@@ -264,6 +268,13 @@ public final class RestClient {
 
 		return client;
 	}
+	
+    public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {
+        return new MoxyJsonConfig()
+        .setAttributePrefix("")
+        .setValueWrapper("value")
+        .property(JAXBContextProperties.JSON_WRAPPER_AS_ARRAY_NAME, true).resolver();
+}
 
 	/**
 	 * Creates the sll client.
