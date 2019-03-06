@@ -2,22 +2,6 @@
 
 REST API Client is an Java based Client for the [Openfire][1] [REST API Plugin][2] which provides the ability to manage Openfire instance by sending an REST/HTTP request to the server.
 
-## Feature list
-REST API Client cover all available REST API plugin features.
-
-* [X] Get overview over all or specific user and to create, update or delete a user
-* [X] Get overview over all or specific chat room and to create, update or delete a chat room
-* [X] Get overview over all or specific user sessions
-* [X] Get all participants of a specified room
-* [X] Get overview over all or specific group and to create, update or delete a group
-* [X] Get overview over all user roster entries and to add, update or delete a roster entry
-* [X] Add user to a group
-* [X] Remove user from a group
-* [X] Close all user sessions
-* [X] Lockout or unlock the user (enable / disable)
-* [X] Get overview over all or specific system properties and to create, update or delete system property
-
-
 ## Repository
 The project is available through the central Maven Repository
 #### Maven
@@ -25,12 +9,12 @@ The project is available through the central Maven Repository
 <dependency>
     <groupId>org.igniterealtime</groupId>
     <artifactId>rest-api-client</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
 </dependency>
 ```
 #### Gradle / Grails
 ```xml
-compile 'org.igniterealtime:rest-api-client:1.1.4'
+compile 'org.igniterealtime:rest-api-client:1.1.5'
 ```
 
 ## Dependencies
@@ -72,7 +56,7 @@ REST API Plugin provides two types of authentication.
   querys.put("search", "test");
   restApiClient.getUsers(querys);
 
-  // Create a new user (username, name, email, passowrd). There are more user settings available.
+  // Create a new user (username, name, email, password). There are more user settings available.
   UserEntity userEntity = new UserEntity("testUsername", "testName", "test@email.com", "p4ssw0rd");
   restApiClient.createUser(userEntity);
 
@@ -84,7 +68,7 @@ REST API Plugin provides two types of authentication.
   restApiClient.deleteUser("testUsername");
 
   // Get all user groups from a user
-  restApiCient.getUserGroups("testUsername");
+  restApiClient.getUserGroups("testUsername");
 
   // Add user to groups
   List<String> groupNames = new ArrayList<String>();
@@ -144,7 +128,7 @@ REST API Plugin provides two types of authentication.
   // Add user with role "outcast" to a chat room
   restApiClient.addOutcast("chatroom1", "username");
 
-  // Get all particapants from a specified chat room
+  // Get all participants from a specified chat room
   restApiClient.getChatRoomParticipants("chatroom1");
 ```
 
@@ -239,7 +223,7 @@ REST API Plugin provides two types of authentication.
 ```
 
 ## Copyright and license
-Created and copyright (c) 2017 by Roman Soldatow (r.soldatow@gmail).
+Created and copyright (c) 2019 by Roman Soldatow (r.soldatow@gmail.com).
 REST API Client may be freely distributed under the Apache 2.0 license.
 
 [1]: https://igniterealtime.org/projects/openfire/index.jsp
