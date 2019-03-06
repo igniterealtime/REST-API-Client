@@ -20,6 +20,7 @@ import org.igniterealtime.restclient.entity.SystemProperty;
 import org.igniterealtime.restclient.entity.UserEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
 import org.igniterealtime.restclient.entity.UserGroupsEntity;
+import org.igniterealtime.restclient.enums.SupportedMediaType;
 
 /**
  * The Class RestApiClient.
@@ -42,8 +43,26 @@ public class RestApiClient {
 	public RestApiClient(String url, int port, AuthenticationToken authenticationToken) {
 		url = adjustURL(url);
 		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
-				.connectionTimeout(5000).build();
+				.connectionTimeout(5000).mediaType(SupportedMediaType.XML).build();
 	}
+	
+	 /**
+     * Instantiates a new rest api client.
+     *
+     * @param url
+     *            the url
+     * @param port
+     *            the port
+     * @param authenticationToken
+     *            the authentication token
+     * @param mediaType 
+     *            the media to send/accept
+     */
+    public RestApiClient(String url, int port, AuthenticationToken authenticationToken, SupportedMediaType mediaType) {
+        url = adjustURL(url);
+        restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
+                .connectionTimeout(5000).mediaType(mediaType).build();
+    }
 	
 	/**
 	 * Instantiates a new rest api client.
@@ -56,8 +75,23 @@ public class RestApiClient {
 	public RestApiClient(String url, int port, AuthenticationToken authenticationToken, int connectionTimeout) {
 		url = adjustURL(url);
 		restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
-				.connectionTimeout(connectionTimeout).build();
+				.connectionTimeout(connectionTimeout).mediaType(SupportedMediaType.XML).build();
 	}
+	
+	 /**
+     * Instantiates a new rest api client.
+     *
+     * @param url the url
+     * @param port the port
+     * @param authenticationToken the authentication token
+     * @param connectionTimeout the connection timeout
+     * @param mediaType the media to send/accept
+     */
+    public RestApiClient(String url, int port, AuthenticationToken authenticationToken, int connectionTimeout, SupportedMediaType mediaType) {
+        url = adjustURL(url);
+        restClient = new RestClientBuilder(url + ":" + port).authenticationToken(authenticationToken)
+                .connectionTimeout(connectionTimeout).mediaType(mediaType).build();
+    }
 
 	/**
 	 * Gets the users.
