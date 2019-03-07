@@ -33,6 +33,8 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.internal.util.Base64;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
+import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
+import org.glassfish.jersey.moxy.xml.MoxyXmlFeature;
 import org.igniterealtime.restclient.entity.AuthenticationMode;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
 import org.igniterealtime.restclient.enums.SupportedMediaType;
@@ -257,7 +259,7 @@ public final class RestClient {
 		}
 
 		
-		clientConfig.register(createMoxyJsonResolver());
+		clientConfig.register(MoxyJsonFeature.class).register(MoxyXmlFeature.class).register(createMoxyJsonResolver());
 		
 		Client client = null;
 		if (this.baseURI.startsWith("https")) {
