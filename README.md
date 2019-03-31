@@ -38,10 +38,21 @@ REST API Plugin provides two types of authentication.
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
 ```
 
+### Data serialization
+REST API Plugin provides both JSON and XML serialization.
+```java
+  // By default XML will be used for serialization; setting the 'Accept: application/xml' 'Content-Type: application/xml' headers
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
+
+  // Similarily JSON can set for serialization; setting the 'Accept: application/json' 'Content-Type: application/json' headers
+  RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken, SupportedMediaType.JSON);
+```
+
 ### User related examples
 ```java
   // Set Shared secret key
   AuthenticationToken authenticationToken = new AuthenticationToken("FQaCIpmRNBq4CfF8");
+  
   // Set Openfire settings (9090 is the port of Openfire Admin Console)
   RestApiClient restApiClient = new RestApiClient("http://testdomain.com", 9090, authenticationToken);
 
