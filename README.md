@@ -234,7 +234,7 @@ REST API Plugin provides both JSON and XML serialization.
 ```
 
 ## Copyright and license
-Created and copyright (c) 2019 by Roman Soldatow (r.soldatow@gmail.com).
+Created and copyright (c) 2020 by Roman Soldatow (openfire@rmsol.de).
 REST API Client may be freely distributed under the Apache 2.0 license.
 
 [1]: https://igniterealtime.org/projects/openfire/index.jsp
