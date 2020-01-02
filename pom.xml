@@ -31,15 +31,17 @@
 	<developers>
 		<developer>
 			<name>Roman Soldatow</name>
-			<email>r.soldatow@gmail</email>
+			<email>openfire@rmsol.de</email>
 			<organizationUrl>https://github.com/igniterealtime/REST-API-Client</organizationUrl>
 		</developer>
 	</developers>
 
 	<properties>
-		<maven.surefire.report.plugin.version>2.14</maven.surefire.report.plugin.version>
-		<maven.javadoc.plugin.version>2.9</maven.javadoc.plugin.version>
+		<maven.surefire.report.plugin.version>2.22.2</maven.surefire.report.plugin.version>
+		<maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
         <jersey.version>2.24.1</jersey.version>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 
 	<dependencies>
