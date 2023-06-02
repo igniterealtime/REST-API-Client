@@ -1,6 +1,6 @@
 package org.igniterealtime.restclient.entity;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 /**
  * The Class UserProperty.
