@@ -64,7 +64,7 @@ public final class RestClient {
 
 	/** The headers. */
 	private MultivaluedMap<String, Object> headers;
-	
+
 	/** The media type. */
 	private SupportedMediaType mediaType;
 
@@ -72,95 +72,129 @@ public final class RestClient {
 	 * Gets the.
 	 *
 	 * @param <T>
-	 *            the generic type
+	 *                         the generic type
 	 * @param restPath
-	 *            the rest path
+	 *                         the rest path
 	 * @param expectedResponse
-	 *            the expected response
+	 *                         the expected response
 	 * @param queryParams
-	 *            the query params
+	 *                         the query params
 	 * @return the t
 	 */
-	public <T> T get(String restPath, Class<T> expectedResponse, Map<String, String> queryParams) {
-		return call(HttpMethod.GET, restPath, expectedResponse, null, queryParams);
+	public <T> T get(
+			String restPath,
+			Class<T> expectedResponse,
+			Map<String, String> queryParams) {
+		return call(HttpMethod.GET,
+				restPath,
+				expectedResponse,
+				null,
+				queryParams);
 	}
 
 	/**
 	 * Post.
 	 *
 	 * @param restPath
-	 *            the rest path
+	 *                    the rest path
 	 * @param payload
-	 *            the payload
+	 *                    the payload
 	 * @param queryParams
-	 *            the query params
+	 *                    the query params
 	 * @return the response
 	 */
-	public Response post(String restPath, Object payload, Map<String, String> queryParams) {
+	public Response post(
+			String restPath,
+			Object payload,
+			Map<String, String> queryParams) {
 		LOG.debug("POST: {}", restPath);
-		return call(HttpMethod.POST, restPath, Response.class, payload, queryParams);
+		return call(HttpMethod.POST,
+				restPath,
+				Response.class,
+				payload,
+				queryParams);
 	}
 
 	/**
 	 * Put.
 	 *
 	 * @param restPath
-	 *            the rest path
+	 *                    the rest path
 	 * @param payload
-	 *            the payload
+	 *                    the payload
 	 * @param queryParams
-	 *            the query params
+	 *                    the query params
 	 * @return the response
 	 */
-	public Response put(String restPath, Object payload, Map<String, String> queryParams) {
+	public Response put(
+			String restPath,
+			Object payload,
+			Map<String, String> queryParams) {
 		LOG.debug("PUT: {}", restPath);
-		return call(HttpMethod.PUT, restPath, Response.class, payload, queryParams);
+		return call(HttpMethod.PUT,
+				restPath,
+				Response.class,
+				payload,
+		queryParams);
 	}
 
 	/**
 	 * Delete.
 	 *
 	 * @param restPath
-	 *            the rest path
+	 *                    the rest path
 	 * @param queryParams
-	 *            the query params
+	 *                    the query params
 	 * @return the response
 	 */
-	public Response delete(String restPath, Map<String, String> queryParams) {
+	public Response delete(
+			String restPath,
+			Map<String, String> queryParams) {
 		LOG.debug("DELETE: {}", restPath);
-		return call(HttpMethod.DELETE, restPath, Response.class, null, queryParams);
+		return call(HttpMethod.DELETE,
+				restPath,
+				Response.class,
+				null,
+		queryParams);
 	}
 
 	/**
 	 * Gets the.
 	 *
 	 * @param <T>
-	 *            the generic type
+	 *                         the generic type
 	 * @param methodName
-	 *            the method name
+	 *                         the method name
 	 * @param restPath
-	 *            the rest path
+	 *                         the rest path
 	 * @param expectedResponse
-	 *            the clazz
+	 *                         the clazz
 	 * @param payload
-	 *            the payload
+	 *                         the payload
 	 * @param queryParams
-	 *            the query params
+	 *                         the query params
 	 * @return the t
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T call(String methodName, String restPath, Class<T> expectedResponse, Object payload,
+	public <T> T call(
+			String methodName,
+			String restPath,
+			Class<T> expectedResponse,
+			Object payload,
 			Map<String, String> queryParams) {
 		WebTarget webTarget = createWebTarget(restPath, queryParams);
-		Response result = webTarget.request().headers(headers).accept(mediaType.getMediaType()).method(
-				methodName.toString(),
-				Entity.entity(payload, mediaType.getMediaType()),
-				Response.class);
+		Response result = webTarget
+				.request()
+				.headers(headers)
+				.accept(mediaType.getMediaType())
+				.method(methodName,
+						Entity.entity(payload, mediaType.getMediaType()),
+						Response.class);
 
 		if (expectedResponse.getName().equals(Response.class.getName())) {
 			return (T) result;
 		}
-		
+
 		if (result != null && isStatusCodeOK(result, restPath)) {
 			return (T) result.readEntity(expectedResponse);
 		}
@@ -172,9 +206,9 @@ public final class RestClient {
 	 * Checks if is status code ok.
 	 *
 	 * @param response
-	 *            the response
+	 *                 the response
 	 * @param uri
-	 *            the uri
+	 *                 the uri
 	 * @return true, if is status code ok
 	 */
 	private boolean isStatusCodeOK(Response response, String uri) {
@@ -199,9 +233,9 @@ public final class RestClient {
 	 * Creates the web target.
 	 *
 	 * @param restPath
-	 *            the rest path
+	 *                    the rest path
 	 * @param queryParams
-	 *            the query params
+	 *                    the query params
 	 * @return the web target
 	 */
 	private WebTarget createWebTarget(String restPath, Map<String, String> queryParams) {
@@ -231,7 +265,7 @@ public final class RestClient {
 	 * The Constructor.
 	 *
 	 * @param builder
-	 *            the builder
+	 *                the builder
 	 */
 	private RestClient(RestClientBuilder builder) {
 		this.baseURI = builder.baseURI;
@@ -246,9 +280,9 @@ public final class RestClient {
 	 *
 	 * @return the client
 	 * @throws KeyManagementException
-	 *             the key management exception
+	 *                                  the key management exception
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *                                  the no such algorithm exception
 	 */
 	private Client createRestClient() throws KeyManagementException, NoSuchAlgorithmException {
 		ClientConfig clientConfig = new ClientConfig();
@@ -258,9 +292,11 @@ public final class RestClient {
 			clientConfig.property(ClientProperties.READ_TIMEOUT, this.connectionTimeout);
 		}
 
-		
-		clientConfig.register(MoxyJsonFeature.class).register(MoxyXmlFeature.class).register(createMoxyJsonResolver());
-		
+		clientConfig
+				.register(MoxyJsonFeature.class)
+				.register(MoxyXmlFeature.class)
+				.register(createMoxyJsonResolver());
+
 		Client client = null;
 		if (this.baseURI.startsWith("https")) {
 			client = createSLLClient(clientConfig);
@@ -270,24 +306,25 @@ public final class RestClient {
 
 		return client;
 	}
-	
-    public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {
-        return new MoxyJsonConfig()
-        .setAttributePrefix("")
-        .setValueWrapper("value")
-        .property(JAXBContextProperties.JSON_WRAPPER_AS_ARRAY_NAME, true).resolver();
-}
+
+	public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {
+		return new MoxyJsonConfig()
+				.setAttributePrefix("")
+				.setValueWrapper("value")
+				.property(JAXBContextProperties.JSON_WRAPPER_AS_ARRAY_NAME, true)
+				.resolver();
+	}
 
 	/**
 	 * Creates the sll client.
 	 *
 	 * @param clientConfig
-	 *            the client config
+	 *                     the client config
 	 * @return the client config
 	 * @throws KeyManagementException
-	 *             the key management exception
+	 *                                  the key management exception
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *                                  the no such algorithm exception
 	 */
 	private Client createSLLClient(ClientConfig clientConfig)
 			throws KeyManagementException, NoSuchAlgorithmException {
@@ -337,15 +374,15 @@ public final class RestClient {
 
 		/** The token. */
 		private AuthenticationToken token;
-		
+
 		/** The media type. */
-	    private SupportedMediaType mediaType;
+		private SupportedMediaType mediaType;
 
 		/**
 		 * The Constructor.
 		 *
 		 * @param baseUri
-		 *            the base uri
+		 *                the base uri
 		 */
 		public RestClientBuilder(String baseUri) {
 			this.headers = new MultivaluedHashMap<String, Object>();
@@ -356,19 +393,19 @@ public final class RestClient {
 		 * Connection timeout.
 		 *
 		 * @param connectionTimeout
-		 *            the connection timeout
+		 *                          the connection timeout
 		 * @return the builder
 		 */
 		public RestClientBuilder connectionTimeout(int connectionTimeout) {
 			this.connectionTimeout = connectionTimeout;
 			return this;
 		}
-		
+
 		/**
 		 * Authentication token.
 		 *
 		 * @param token
-		 *            the token
+		 *              the token
 		 * @return the rest client builder
 		 */
 		public RestClientBuilder authenticationToken(AuthenticationToken token) {
@@ -387,25 +424,25 @@ public final class RestClient {
 		 * Headers.
 		 *
 		 * @param headers
-		 *            the headers
+		 *                the headers
 		 * @return the rest client builder
 		 */
 		public RestClientBuilder headers(MultivaluedMap<String, Object> headers) {
 			this.headers = headers;
 			return this;
 		}
-		
-	     /**
-         *.
-         *
-         * @param mediaType
-         *            the mediaType
-         * @return the rest client builder
-         */
-        public RestClientBuilder mediaType(SupportedMediaType mediaType) {
-            this.mediaType = mediaType;
-            return this;
-        }
+
+		/**
+		 * .
+		 *
+		 * @param mediaType
+		 *                  the mediaType
+		 * @return the rest client builder
+		 */
+		public RestClientBuilder mediaType(SupportedMediaType mediaType) {
+			this.mediaType = mediaType;
+			return this;
+		}
 
 		/**
 		 * Builds the.
@@ -450,7 +487,7 @@ public final class RestClient {
 	 * Sets the password.
 	 *
 	 * @param password
-	 *            the new password
+	 *                 the new password
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -469,7 +506,7 @@ public final class RestClient {
 	 * Sets the connection timeout.
 	 *
 	 * @param connectionTimeout
-	 *            the new connection timeout
+	 *                          the new connection timeout
 	 */
 	public void setConnectionTimeout(int connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
@@ -488,7 +525,7 @@ public final class RestClient {
 	 * Sets the token.
 	 *
 	 * @param token
-	 *            the token
+	 *              the token
 	 */
 	public void setToken(AuthenticationToken token) {
 		this.token = token;
@@ -507,28 +544,28 @@ public final class RestClient {
 	 * Sets the headers.
 	 *
 	 * @param headers
-	 *            the headers
+	 *                the headers
 	 */
 	public void setHeaders(MultivaluedMap<String, Object> headers) {
 		this.headers = headers;
 	}
 
-	   /**
-     * Gets the mediaType.
-     *
-     * @return the mediaType
-     */
-    public SupportedMediaType getMediaType() {
-        return mediaType;
-    }
+	/**
+	 * Gets the mediaType.
+	 *
+	 * @return the mediaType
+	 */
+	public SupportedMediaType getMediaType() {
+		return mediaType;
+	}
 
-    /**
-     * Sets the mediaType.
-     *
-     * @param mediaType
-     *            the mediaType
-     */
-    public void setMediaType(SupportedMediaType mediaType) {
-        this.mediaType = mediaType;
-    }
+	/**
+	 * Sets the mediaType.
+	 *
+	 * @param mediaType
+	 *                  the mediaType
+	 */
+	public void setMediaType(SupportedMediaType mediaType) {
+		this.mediaType = mediaType;
+	}
 }

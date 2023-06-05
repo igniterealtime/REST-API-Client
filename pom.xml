@@ -40,8 +40,9 @@
 		<maven.surefire.report.plugin.version>2.22.2</maven.surefire.report.plugin.version>
 		<maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
 		<jersey.version>2.24.1</jersey.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<xml.version>4.0.0</xml.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<slf4j.version>1.7.36</slf4j.version>
 	</properties>
 
@@ -65,6 +66,17 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>${xml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>${xml.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 

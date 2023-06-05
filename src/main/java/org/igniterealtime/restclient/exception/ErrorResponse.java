@@ -1,6 +1,6 @@
 package org.igniterealtime.restclient.exception;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * The Class ErrorResponse.
