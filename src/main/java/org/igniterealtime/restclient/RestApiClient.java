@@ -1,9 +1,10 @@
 package org.igniterealtime.restclient;
 
+import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.ws.rs.core.Response;
+
 
 import org.igniterealtime.restclient.RestClient.RestClientBuilder;
 import org.igniterealtime.restclient.entity.AuthenticationToken;
